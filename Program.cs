@@ -7,10 +7,10 @@ using elearning_platform.Auth;
 using elearning_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using elearning_platform.Repo;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var jwtConfig = new JWTConfig();
 builder.Configuration.Bind("JWT", jwtConfig);
@@ -48,9 +48,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
+builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

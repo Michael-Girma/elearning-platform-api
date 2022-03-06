@@ -10,5 +10,10 @@ namespace elearning_platform.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<UserClaim> UserClaims { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+
+        public DbSet<EducationLevel> EducationLevels { get; set; }
+
     }
 }
