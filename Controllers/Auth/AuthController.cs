@@ -16,13 +16,15 @@ namespace elearning_platform.Controllers.Auth
         private readonly IUserRepo _userRepo;
         private readonly IStudentRepo _studentRepo;
         private readonly IMapper _mapper;
+        private readonly IAdminRepo _adminRepo;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IMapper mapper)
+        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper)
         {
             _jwtRepo = jwtRepo;
             _userRepo = userRepo;
             _studentRepo = studentRepo;
             _mapper = mapper;
+            _adminRepo = adminRepo;
         }
 
         [HttpPost]
@@ -51,6 +53,26 @@ namespace elearning_platform.Controllers.Auth
             var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
 
             return Ok(loginStudentDTO);
+        }
+
+        [HttpPost]
+        [Route("admin/login")]
+        public ActionResult<LoginAdminDTO> LoginAdmin(LoginDTO readUserDto)
+        {
+            var token = _jwtRepo.Authenticate(readUserDto);
+            if (token == null)
+            {
+                return Forbid("Incorrect Credentials");
+            }
+            var admin = _adminRepo.GetAdminByUid(token.Uid);
+            if (admin == null)
+            {
+                return Forbid("Incorrect Credentials");
+            }
+
+            var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
+
+            return Ok(loginAdminDTO);
         }
     }
 }

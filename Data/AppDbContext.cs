@@ -15,5 +15,7 @@ namespace elearning_platform.Data
 
         public DbSet<EducationLevel> EducationLevels { get; set; }
 
+        public DbSet<Admin> Admins { get; set; }
+
     }
 }
