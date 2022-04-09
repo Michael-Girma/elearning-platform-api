@@ -7,6 +7,7 @@ using elearning_platform.Auth;
 using elearning_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using elearning_platform.Repo;
+using elearning_platform.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtConfig = new JWTConfig();
 builder.Configuration.Bind("JWT", jwtConfig);
+
+var smtpConfig = new SMTPConfig();
+builder.Configuration.Bind("SMTP", smtpConfig);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,7 +53,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
-
+builder.Services.AddSingleton(smtpConfig);
+builder.Services.AddSingleton<IAuthService, AuthService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
