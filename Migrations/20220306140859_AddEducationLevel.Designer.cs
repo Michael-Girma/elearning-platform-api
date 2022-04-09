@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using elearning_platform.Data;
@@ -11,9 +12,10 @@ using elearning_platform.Data;
 namespace elearning_platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306140859_AddEducationLevel")]
+    partial class AddEducationLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,24 +23,6 @@ namespace elearning_platform.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("elearning_platform.Models.Admin", b =>
-                {
-                    b.Property<int>("AdminId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AdminId"));
-
-                    b.Property<int>("Uid")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AdminId");
-
-                    b.HasIndex("Uid");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("elearning_platform.Models.EducationLevel", b =>
                 {
@@ -150,17 +134,6 @@ namespace elearning_platform.Migrations
                     b.HasIndex("Uid");
 
                     b.ToTable("UserClaims");
-                });
-
-            modelBuilder.Entity("elearning_platform.Models.Admin", b =>
-                {
-                    b.HasOne("elearning_platform.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Uid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.Student", b =>
