@@ -17,5 +17,7 @@ namespace elearning_platform.Data
 
         public DbSet<Admin> Admins { get; set; }
 
+        public DbSet<Mfa> MFAs { get; set; }
+
     }
 }

@@ -1,37 +1,26 @@
 using System.Net.Mail;
 using elearning_platform.Configs;
+using elearning_platform.Models;
 
 namespace elearning_platform.Services
 {
     public class AuthService : IAuthService
     {
         private readonly SMTPConfig _smtpConfig;
+        private readonly IEmailService _emailService;
 
-        public AuthService(SMTPConfig smtpConfig)
+        public AuthService(SMTPConfig smtpConfig, IEmailService emailService)
         {
             _smtpConfig = smtpConfig;
+            _emailService = emailService;
         }
 
-        public async Task<bool> SendMfaEmailAsync(string email, string body)
+        public async Task<bool> SendMfaAsync(User user, Mfa mfa)
         {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(_smtpConfig.EmailFromAddress);
-            message.Body = body;
-            message.To.Add(email);
-            message.IsBodyHtml = false;
-            message.Subject = "Multi-factor Auth";
-            var client = _smtpConfig.getClientForConfig();
-            try
-            {
-                client.Send(message);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            var body = $"Here's your new code: {mfa.PinCode}";
+            var subject = "Multi-Factor Auth";
+            var success = await _emailService.SendEmail(user.Email, body, subject);
+            return success;
         }
-
-
     }
 }

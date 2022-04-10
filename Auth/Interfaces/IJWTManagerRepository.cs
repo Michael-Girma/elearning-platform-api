@@ -6,6 +6,6 @@ namespace elearning_platform.Auth
 {
     public interface IJWTManagerRepository
     {
-        JWTToken? Authenticate(LoginDTO user);
+        Task<JWTToken?> Authenticate(LoginDTO user);
     }
 }

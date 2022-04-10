@@ -20,7 +20,7 @@ namespace elearning_platform.Controllers.Auth
         private readonly IMapper _mapper;
         private readonly IAdminRepo _adminRepo;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, AuthService authService)
+        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService)
         {
             _jwtRepo = jwtRepo;
             _userRepo = userRepo;
@@ -35,49 +35,64 @@ namespace elearning_platform.Controllers.Auth
         public ActionResult login(LoginDTO readUserDto)
         {
 
-            _authService.SendMfaEmailAsync("mchlgirma@gmail.com", "23e1");
+            // _authService.SendMfaAsync("mchlgirma@gmail.com", "23e1");
             var token = _jwtRepo.Authenticate(readUserDto);
             return Ok(token);
         }
 
         [HttpPost]
         [Route("student/login")]
-        public ActionResult<LoginStudentDTO> LoginStudent(LoginDTO readUserDto)
+        public async Task<ActionResult<LoginStudentDTO>> LoginStudent(LoginDTO readUserDto)
         {
-            var token = _jwtRepo.Authenticate(readUserDto);
-            if (token == null)
+            var token = await _jwtRepo.Authenticate(readUserDto);
+            try
             {
-                return Forbid("User Not Found");
+                if (token == null)
+                {
+                    return Ok("Please check your email for MFA code");
+                }
+                var student = _studentRepo.GetStudentByUid(token.Uid, true);
+                if (student == null)
+                {
+                    return Forbid("UserData Not Found");
+                }
+                var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
+
+                return Ok(loginStudentDTO);
             }
-            var student = _studentRepo.GetStudentByUid(token.Uid, true);
-            if (student == null)
+            catch
             {
-                return Forbid("UserData Not Found");
+                return Unauthorized("Invalid Credentials");
             }
-
-            var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
-
-            return Ok(loginStudentDTO);
         }
 
         [HttpPost]
         [Route("admin/login")]
-        public ActionResult<LoginAdminDTO> LoginAdmin(LoginDTO readUserDto)
+        public async Task<ActionResult<LoginAdminDTO>> LoginAdmin(LoginDTO readUserDto)
         {
-            var token = _jwtRepo.Authenticate(readUserDto);
-            if (token == null)
+            try
             {
-                return Forbid("Incorrect Credentials");
+                var token = await _jwtRepo.Authenticate(readUserDto);
+                if (token == null)
+                {
+                    return Ok("Check your email for an MFA Code");
+                }
+                var admin = _adminRepo.GetAdminByUid(token.Uid);
+                if (admin == null)
+                {
+                    return Forbid("Incorrect Credentials");
+                }
+
+                // var email = _authService.SendMfaEmailAsync("mchlgirma@gmail.com", "123e");
+                var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
+
+                return Ok(loginAdminDTO);
+
             }
-            var admin = _adminRepo.GetAdminByUid(token.Uid);
-            if (admin == null)
+            catch (Exception e)
             {
-                return Forbid("Incorrect Credentials");
+                return Unauthorized("Incorrect Credentials");
             }
-
-            var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
-
-            return Ok(loginAdminDTO);
         }
     }
 }

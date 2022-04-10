@@ -55,7 +55,9 @@ builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddSingleton(smtpConfig);
-builder.Services.AddSingleton<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMfaRepo, MfaRepo>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>

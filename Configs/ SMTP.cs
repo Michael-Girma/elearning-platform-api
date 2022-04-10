@@ -43,7 +43,10 @@ namespace elearning_platform.Configs
 
         public SmtpClient getClientForConfig()
         {
-            return new SmtpClient(EmailFromAddress, PortNumber);
+            var client = new SmtpClient(SmtpAddress, PortNumber);
+            client.Credentials = _credentials;
+            client.EnableSsl = EnableSSL;
+            return client;
         }
 
     }

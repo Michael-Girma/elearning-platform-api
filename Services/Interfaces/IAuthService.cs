@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-
+using elearning_platform.Models;
 
 namespace elearning_platform.Services
 {
     public interface IAuthService
     {
-        Task<bool> SendMfaEmailAsync(string email, string body);
+        Task<bool> SendMfaAsync(User user, Mfa mfa);
     }
 }

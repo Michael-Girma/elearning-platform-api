@@ -4,6 +4,6 @@ namespace elearning_platform.DTO
     {
         public string Username { get; set; }
 
-        public int pinCode { get; set; }
+        public int? pinCode { get; set; }
     }
 }
