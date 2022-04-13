@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using elearning_platform.Repo;
 using elearning_platform.Services;
+using elearning_platform.Exceptions;
 using AutoMapper;
 
 namespace elearning_platform.Controllers.Auth
@@ -44,25 +45,34 @@ namespace elearning_platform.Controllers.Auth
         [Route("student/login")]
         public async Task<ActionResult<LoginStudentDTO>> LoginStudent(LoginDTO readUserDto)
         {
-            var token = await _jwtRepo.Authenticate(readUserDto);
+            var auth = await _jwtRepo.Authenticate(readUserDto);
             try
             {
-                if (token == null)
+                if (auth.Result == AuthResult.MfaCodeIssued)
                 {
                     return Ok("Please check your email for MFA code");
                 }
-                var student = _studentRepo.GetStudentByUid(token.Uid, true);
-                if (student == null)
+                else
                 {
-                    return Forbid("UserData Not Found");
-                }
-                var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
+                    var token = auth.JwtToken;
+                    var student = _studentRepo.GetStudentByUid(token.Uid, true);
+                    if (student == null)
+                    {
+                        return Forbid("UserData Not Found");
+                    }
+                    var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
 
-                return Ok(loginStudentDTO);
+                    return Ok(loginStudentDTO);
+                }
             }
-            catch
+            catch (AuthException e)
             {
-                return Unauthorized("Invalid Credentials");
+                if (e.Result == AuthResult.WrongMfaCode)
+                    return Forbid("Wrong MFA Code");
+                else
+                {
+                    return Unauthorized(e.Message);
+                }
             }
         }
 
@@ -70,28 +80,34 @@ namespace elearning_platform.Controllers.Auth
         [Route("admin/login")]
         public async Task<ActionResult<LoginAdminDTO>> LoginAdmin(LoginDTO readUserDto)
         {
+            var auth = await _jwtRepo.Authenticate(readUserDto);
             try
             {
-                var token = await _jwtRepo.Authenticate(readUserDto);
-                if (token == null)
+                if (auth.Result == AuthResult.MfaCodeIssued)
                 {
-                    return Ok("Check your email for an MFA Code");
+                    return Ok("Please check your email for MFA code");
                 }
-                var admin = _adminRepo.GetAdminByUid(token.Uid);
-                if (admin == null)
+                else
                 {
-                    return Forbid("Incorrect Credentials");
+                    var token = auth.JwtToken;
+                    var admin = _adminRepo.GetAdminByUid(token.Uid);
+                    if (admin == null)
+                    {
+                        return Forbid("UserData Not Found");
+                    }
+                    var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
+
+                    return Ok(loginAdminDTO);
                 }
-
-                // var email = _authService.SendMfaEmailAsync("mchlgirma@gmail.com", "123e");
-                var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
-
-                return Ok(loginAdminDTO);
-
             }
-            catch (Exception e)
+            catch (AuthException e)
             {
-                return Unauthorized("Incorrect Credentials");
+                if (e.Result == AuthResult.WrongMfaCode)
+                    return Forbid(e.Result.ToString());
+                else
+                {
+                    return Unauthorized(e.Result.ToString());
+                }
             }
         }
     }

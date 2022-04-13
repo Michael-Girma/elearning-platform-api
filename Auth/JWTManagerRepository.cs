@@ -7,6 +7,8 @@ using elearning_platform.Configs;
 using elearning_platform.DTO;
 using elearning_platform.Repo;
 using elearning_platform.Services;
+using elearning_platform.Exceptions;
+
 
 namespace elearning_platform.Auth
 {
@@ -17,9 +19,6 @@ namespace elearning_platform.Auth
         private readonly IUserRepo _userRepo;
         private readonly IMfaRepo _mfaRepo;
         private readonly IAuthService _authService;
-        private readonly IEmailService _emailService;
-
-        public enum AuthResult { DOPE };
 
         public JWTManagerRepository(JWTConfig jwtConfig, IUserRepo userRepo, IMfaRepo mfaRepo, IAuthService authService)
         {
@@ -29,7 +28,7 @@ namespace elearning_platform.Auth
             _authService = authService;
         }
 
-        public async Task<JWTToken?> Authenticate(LoginDTO loginDTO)
+        public async Task<AuthResponse> Authenticate(LoginDTO loginDTO)
         {
             var user = _userRepo.GetUserByUsername(loginDTO.Username, true);
             if (user != null)
@@ -37,8 +36,8 @@ namespace elearning_platform.Auth
                 if (loginDTO.pinCode != null)
 
                 {
-                    var authenticated = await _mfaRepo.CheckMfaAsync(user, (int)loginDTO.pinCode);
-                    if (authenticated)
+                    var mfaAuthResult = await _mfaRepo.CheckMfaAsync(user, (int)loginDTO.pinCode);
+                    if (mfaAuthResult == MfaAuthResult.Authenticated)
                     {
                         var userClaims = user.Claims;
                         List<Claim> claims = new List<Claim>();
@@ -56,19 +55,19 @@ namespace elearning_platform.Auth
                         };
                         var token = tokenHandler.CreateToken(descriptor);
                         var jwtToken = new JWTToken { Token = tokenHandler.WriteToken(token), Uid = user.Uid };
-                        return jwtToken;
+                        return new AuthResponse(AuthResult.Successful, jwtToken);
                     }
-                    throw new Exception("Wrong Multi Factor Auth");
+                    throw new AuthException(AuthResult.WrongMfaCode);
                 }
                 else
                 {
                     var code = await _mfaRepo.GenerateMfaAsync(user);
                     _mfaRepo.SaveChanges();
                     var success = await _authService.SendMfaAsync(user, code);
-                    return null;
+                    return new AuthResponse(AuthResult.MfaCodeIssued);
                 }
             }
-            throw new Exception("User doesn't exist");
+            throw new AuthException(AuthResult.UserDoesNotExist);
         }
     }
 }

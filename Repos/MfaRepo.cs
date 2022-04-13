@@ -8,22 +8,28 @@ namespace elearning_platform.Repo
     public class MfaRepo : IMfaRepo
     {
         private readonly AppDbContext _ctx;
-        private int EXPIRE_TIME = 300;
+        private int EXPIRE_TIME = 300; //TODO: move this to auth config and parse in cs file
 
         public MfaRepo(AppDbContext ctx)
         {
             _ctx = ctx;
         }
-        public Task<bool> CheckMfaAsync(User user, int value)
+        public async Task<MfaAuthResult> CheckMfaAsync(User user, int value)
         {
             var existingCode = _ctx.MFAs.SingleOrDefault(code => code.PinCode == value && code.Uid == user.Uid);
 
-            if (existingCode != null && existingCode.ExpiresAt > DateTime.UtcNow)
+            if (existingCode == null)
             {
-                return Task.FromResult<bool>(true);
+                return MfaAuthResult.InvalidCode;
             }
-            return Task.FromResult<bool>(false);
-
+            else if (existingCode.ExpiresAt.CompareTo(DateTime.UtcNow) < 1)
+            {
+                return MfaAuthResult.ExpiredCode;
+            }
+            else
+            {
+                return MfaAuthResult.Authenticated;
+            }
         }
 
         public bool SaveChanges()
@@ -35,7 +41,7 @@ namespace elearning_platform.Repo
             var mfaCode = RandomNumberGenerator.GetInt32(9999);
             var mfa = new Mfa()
             {
-                ExpiresAt = DateTime.Now.AddSeconds(EXPIRE_TIME).ToUniversalTime(),
+                ExpiresAt = DateTime.UtcNow.AddSeconds(EXPIRE_TIME),
                 Uid = user.Uid,
                 PinCode = mfaCode,
                 Iat = DateTime.Now.ToUniversalTime()
