@@ -19,9 +19,10 @@ namespace elearning_platform.Controllers.Auth
         private readonly IAuthService _authService;
         private readonly IStudentRepo _studentRepo;
         private readonly IMapper _mapper;
+        private readonly IClaimRepo _claimRepo;
         private readonly IAdminRepo _adminRepo;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService)
+        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo)
         {
             _jwtRepo = jwtRepo;
             _userRepo = userRepo;
@@ -29,16 +30,16 @@ namespace elearning_platform.Controllers.Auth
             _authService = authService;
             _mapper = mapper;
             _adminRepo = adminRepo;
+            _claimRepo = claimRepo;
         }
 
         [HttpPost]
         [Route("login")]
-        public ActionResult login(LoginDTO readUserDto)
+        public async Task<ActionResult> login(LoginDTO readUserDto)
         {
-
-            // _authService.SendMfaAsync("mchlgirma@gmail.com", "23e1");
-            var token = _jwtRepo.Authenticate(readUserDto);
-            return Ok(token);
+            //TODO: change route to verify email addresses
+            var token = await _jwtRepo.Authenticate(readUserDto);
+            return Ok(token.JwtToken);
         }
 
         [HttpPost]
@@ -109,6 +110,21 @@ namespace elearning_platform.Controllers.Auth
                     return Unauthorized(e.Result.ToString());
                 }
             }
+        }
+
+        [HttpPost]
+        [Route("student/signup")]
+        public ActionResult OnboardStudent(StudentSignupDTO studentSignupDto)
+        {
+            var studentModel = _mapper.Map<StudentSignupDTO, Student>(studentSignupDto);
+            // studentModel.Uid = User.I
+            var test = new Student();
+            studentModel.Uid = 1;
+            // studentModel.
+            var student = _studentRepo.CreateStudent(studentModel);
+            _studentRepo.SaveChanges();
+            student = _claimRepo.AddClaimForStudent(student);
+            return Ok(student);
         }
     }
 }

@@ -45,6 +45,7 @@ namespace elearning_platform.Auth
                         {
                             claims.Add(new Claim(userClaim.Claim, userClaim.Value));
                         }
+                        claims.Add(new Claim("UserId", user.Uid.ToString()));
                         var tokenHandler = new JwtSecurityTokenHandler();
                         var tokenKey = Encoding.UTF8.GetBytes(_jwtConfig.Key);
                         var descriptor = new SecurityTokenDescriptor

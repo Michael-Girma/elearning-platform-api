@@ -16,6 +16,5 @@ namespace elearning_platform.Models
         public int Uid { get; set; }
 
         public User User { get; set; }
-
     }
 }

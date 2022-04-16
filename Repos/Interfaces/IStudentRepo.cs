@@ -9,5 +9,7 @@ namespace elearning_platform.Repo
         Student? GetStudentById(int studentId, bool includeRelations = false);
 
         Student? GetStudentByUid(int uid, bool includeRelations = false);
+        Student CreateStudent(Student student);
+        bool SaveChanges();
     }
 }

@@ -57,6 +57,7 @@ builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddSingleton(smtpConfig);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMfaRepo, MfaRepo>();
+builder.Services.AddScoped<IClaimRepo, ClaimRepo>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 

@@ -38,7 +38,7 @@ namespace elearning_platform.Repo
         }
         public Task<Mfa> GenerateMfaAsync(User user)
         {
-            var mfaCode = RandomNumberGenerator.GetInt32(9999);
+            var mfaCode = RandomNumberGenerator.GetInt32(8999) + 1000;
             var mfa = new Mfa()
             {
                 ExpiresAt = DateTime.UtcNow.AddSeconds(EXPIRE_TIME),

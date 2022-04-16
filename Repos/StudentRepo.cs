@@ -32,5 +32,16 @@ namespace elearning_platform.Repo
         {
             throw new NotImplementedException();
         }
+
+        public Student CreateStudent(Student student)
+        {
+            _ctx.Students.Add(student);
+            return student;
+        }
+
+        public bool SaveChanges()
+        {
+            return _ctx.SaveChanges() > 0;
+        }
     }
 }
