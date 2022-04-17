@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
+using elearning_platform.Middlewares;
 using elearning_platform.Configs;
 using elearning_platform.Auth;
 using elearning_platform.Data;
@@ -51,15 +51,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddSingleton(jwtConfig);
+builder.Services.AddSingleton(smtpConfig);
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
-builder.Services.AddSingleton(smtpConfig);
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<IMfaRepo, MfaRepo>();
 builder.Services.AddScoped<IClaimRepo, ClaimRepo>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IAdminRepo, AdminRepo>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -82,7 +83,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCurrentUserService();
 app.MapControllers();
 
 app.Run();

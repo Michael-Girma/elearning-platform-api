@@ -18,9 +18,10 @@ namespace elearning_platform.Repo
             throw new NotImplementedException();
         }
 
-        public User GetUserById(int id)
+        public User? GetUserById(int uid, bool includeClaims = false)
         {
-            throw new NotImplementedException();
+            var user = includeClaims ? _ctx.Users.Include(u => u.Claims) : _ctx.Users.AsQueryable();
+            return user.SingleOrDefault(u => u.Uid == uid);
         }
 
         public User? GetUserByUsername(string username, bool includeClaims = false)

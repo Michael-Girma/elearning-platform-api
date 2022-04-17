@@ -21,8 +21,9 @@ namespace elearning_platform.Controllers.Auth
         private readonly IMapper _mapper;
         private readonly IClaimRepo _claimRepo;
         private readonly IAdminRepo _adminRepo;
+        private readonly ICurrentUserService _currentUserService;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo)
+        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService)
         {
             _jwtRepo = jwtRepo;
             _userRepo = userRepo;
@@ -31,6 +32,7 @@ namespace elearning_platform.Controllers.Auth
             _mapper = mapper;
             _adminRepo = adminRepo;
             _claimRepo = claimRepo;
+            _currentUserService = currentUserService;
         }
 
         [HttpPost]
@@ -38,8 +40,12 @@ namespace elearning_platform.Controllers.Auth
         public async Task<ActionResult> login(LoginDTO readUserDto)
         {
             //TODO: change route to verify email addresses
-            var token = await _jwtRepo.Authenticate(readUserDto);
-            return Ok(token.JwtToken);
+            var auth = await _jwtRepo.Authenticate(readUserDto);
+            if (auth.Result == AuthResult.MfaCodeIssued)
+            {
+                return Ok("Please check your email for MFA code");
+            }
+            return Ok(auth.JwtToken);
         }
 
         [HttpPost]
@@ -113,18 +119,27 @@ namespace elearning_platform.Controllers.Auth
         }
 
         [HttpPost]
+        [Authorize]
         [Route("student/signup")]
         public ActionResult OnboardStudent(StudentSignupDTO studentSignupDto)
         {
             var studentModel = _mapper.Map<StudentSignupDTO, Student>(studentSignupDto);
-            // studentModel.Uid = User.I
-            var test = new Student();
-            studentModel.Uid = 1;
-            // studentModel.
+            studentModel.Uid = _currentUserService.User.Uid;
+
             var student = _studentRepo.CreateStudent(studentModel);
-            _studentRepo.SaveChanges();
             student = _claimRepo.AddClaimForStudent(student);
+            _studentRepo.SaveChanges();
             return Ok(student);
+        }
+
+        [HttpGet]
+        [Route("ping")]
+        public StudentSignupDTO Ping()
+        {
+            return new StudentSignupDTO()
+            {
+                DateOfBirth = DateTime.Now
+            };
         }
     }
 }

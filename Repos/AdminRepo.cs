@@ -21,7 +21,7 @@ namespace elearning_platform.Repo
             return admin;
         }
 
-        public Admin GetAdminByUid(int uid)
+        public Admin? GetAdminByUid(int uid)
         {
             var admin = _ctx.Admins.Include(a => a.User).FirstOrDefault(admin => admin.Uid == uid);
             return admin;
