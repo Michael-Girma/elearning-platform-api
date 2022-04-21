@@ -1,5 +1,5 @@
 using elearning_platform.Models;
-
+using elearning_platform.DTO;
 namespace elearning_platform.Repo
 {
     public interface IUserRepo
@@ -11,6 +11,12 @@ namespace elearning_platform.Repo
 
         bool DeleteUser(User user);
 
+        User? GetUserByEmail(string emailAddress);
+
+        User? AuthUser(LoginDTO loginDTO);
+
         bool SaveChanges();
+        User CreateUser(User newUser);
+
     }
 }

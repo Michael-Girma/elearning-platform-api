@@ -52,9 +52,9 @@ namespace elearning_platform.Controllers.Auth
         [Route("student/login")]
         public async Task<ActionResult<LoginStudentDTO>> LoginStudent(LoginDTO readUserDto)
         {
-            var auth = await _jwtRepo.Authenticate(readUserDto);
             try
             {
+                var auth = await _jwtRepo.Authenticate(readUserDto);
                 if (auth.Result == AuthResult.MfaCodeIssued)
                 {
                     return Ok("Please check your email for MFA code");
@@ -87,9 +87,9 @@ namespace elearning_platform.Controllers.Auth
         [Route("admin/login")]
         public async Task<ActionResult<LoginAdminDTO>> LoginAdmin(LoginDTO readUserDto)
         {
-            var auth = await _jwtRepo.Authenticate(readUserDto);
             try
             {
+                var auth = await _jwtRepo.Authenticate(readUserDto);
                 if (auth.Result == AuthResult.MfaCodeIssued)
                 {
                     return Ok("Please check your email for MFA code");
@@ -140,6 +140,21 @@ namespace elearning_platform.Controllers.Auth
             {
                 DateOfBirth = DateTime.Now
             };
+        }
+
+        [HttpPost]
+        [Route("signup")]
+        public ReadUserDTO SignupUser(SignupDTO signupDTO)
+        {
+            var userModel = _mapper.Map<SignupDTO, User>(signupDTO);
+            var existingUser = _userRepo.GetUserByEmail(userModel.Email);
+            if (existingUser != null)
+            {
+                throw new Exception("User already exists");
+            }
+            var user = _userRepo.CreateUser(userModel);
+            _userRepo.SaveChanges();
+            return _mapper.Map<ReadUserDTO>(userModel);
         }
     }
 }

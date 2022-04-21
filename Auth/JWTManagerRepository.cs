@@ -30,7 +30,7 @@ namespace elearning_platform.Auth
 
         public async Task<AuthResponse> Authenticate(LoginDTO loginDTO)
         {
-            var user = _userRepo.GetUserByUsername(loginDTO.Username, true);
+            var user = _userRepo.AuthUser(loginDTO);
             if (user != null)
             {
                 if (loginDTO.pinCode != null)
@@ -68,7 +68,7 @@ namespace elearning_platform.Auth
                     return new AuthResponse(AuthResult.MfaCodeIssued);
                 }
             }
-            throw new AuthException(AuthResult.UserDoesNotExist);
+            throw new AuthException(AuthResult.IncorrectCredentials);
         }
     }
 }

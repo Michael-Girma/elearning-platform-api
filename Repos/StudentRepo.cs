@@ -25,7 +25,7 @@ namespace elearning_platform.Repo
                 _ctx.Students.Include(s => s.User).Include(s => s.EducationLevel)
                 : _ctx.Students.AsQueryable();
 
-            return students.SingleOrDefault(s => s.Uid == uid);
+            return students.FirstOrDefault(s => s.Uid == uid);
         }
 
         public IEnumerable<Student> GetStudents(bool includeRelations = false)

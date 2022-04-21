@@ -1,7 +1,7 @@
 using elearning_platform.Data;
 using elearning_platform.Models;
 using Microsoft.EntityFrameworkCore;
-
+using elearning_platform.DTO;
 namespace elearning_platform.Repo
 {
     public class UserRepo : IUserRepo
@@ -38,7 +38,30 @@ namespace elearning_platform.Repo
 
         public bool SaveChanges()
         {
-            throw new NotImplementedException();
+            return _ctx.SaveChanges() > 0;
+        }
+
+        public User? GetUserByEmail(string emailAddress)
+        {
+            var user = _ctx.Users.FirstOrDefault(temp => temp.Email == emailAddress);
+            return user;
+        }
+
+        public User CreateUser(User newUser)
+        {
+            newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+            _ctx.Users.Add(newUser);
+            return newUser;
+        }
+
+        public User? AuthUser(LoginDTO loginDTO)
+        {
+            var user = _ctx.Users.Include(e => e.Claims).FirstOrDefault(tempUser => tempUser.Email == loginDTO.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password))
+            {
+                return null;
+            }
+            return user;
         }
     }
 }
