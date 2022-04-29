@@ -35,6 +35,7 @@ namespace elearning_platform.Services
             using (var mem = new MemoryStream())
             {
                 formFile.CopyTo(mem);
+                mem.Position = 0;
                 var fileBytes = mem.ToArray();
                 var dropBoxFileName = $"{GetFileNameWithoutExt(formFile.FileName)}-{DataUtils.ToMD5Hash(fileBytes)}.{GetFileExtension(formFile.FileName)}";
                 var updated = _dbx.Files.UploadAsync(
