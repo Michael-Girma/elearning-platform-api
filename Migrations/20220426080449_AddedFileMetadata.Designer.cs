@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using elearning_platform.Data;
@@ -11,9 +12,10 @@ using elearning_platform.Data;
 namespace elearning_platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220426080449_AddedFileMetadata")]
+    partial class AddedFileMetadata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,10 +80,6 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("OriginalFileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
@@ -90,7 +88,7 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UploadedByUid")
+                    b.Property<int>("UploadedByUid")
                         .HasColumnType("integer");
 
                     b.HasKey("FileId");
@@ -235,7 +233,9 @@ namespace elearning_platform.Migrations
                 {
                     b.HasOne("elearning_platform.Models.User", "UploadedBy")
                         .WithMany()
-                        .HasForeignKey("UploadedByUid");
+                        .HasForeignKey("UploadedByUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UploadedBy");
                 });

@@ -12,7 +12,7 @@ namespace elearning_platform.Services
             _smtpConfig = smtpConfig;
         }
 
-        public async Task<bool> SendEmail(string email, string body, string subject)
+        public bool SendEmail(string email, string body, string subject)
         {
             MailMessage message = new MailMessage();
             message.From = new MailAddress(_smtpConfig.EmailFromAddress);

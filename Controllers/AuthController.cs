@@ -22,8 +22,9 @@ namespace elearning_platform.Controllers.Auth
         private readonly IClaimRepo _claimRepo;
         private readonly IAdminRepo _adminRepo;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IFileService _fs;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService)
+        public AuthController(IJWTManagerRepository jwtRepo, IFileService fs, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService)
         {
             _jwtRepo = jwtRepo;
             _userRepo = userRepo;
@@ -33,6 +34,7 @@ namespace elearning_platform.Controllers.Auth
             _adminRepo = adminRepo;
             _claimRepo = claimRepo;
             _currentUserService = currentUserService;
+            _fs = fs;
         }
 
         [HttpPost]

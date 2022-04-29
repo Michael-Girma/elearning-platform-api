@@ -19,17 +19,8 @@ namespace elearning_platform.Services
         {
             var body = $"Here's your new code: {mfa.PinCode}";
             var subject = "Multi-Factor Auth";
-            var success = await _emailService.SendEmail(user.Email, body, subject);
+            var success = _emailService.SendEmail(user.Email, body, subject);
             return success;
         }
-
-        // public User HashPassword(User user)
-        // {
-        //     var password = user.Password;
-        //     if(password != null && password.Trim().Length >= 8)
-        //     {
-        //         var hashedPassword = 
-        //     }
-        // }
     }
 }

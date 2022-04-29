@@ -27,7 +27,6 @@ namespace elearning_platform.Models
             JwtToken = jwtToken;
         }
 
-
         override public string ToString()
         {
             return GetResultString(Result);
@@ -44,7 +43,6 @@ namespace elearning_platform.Models
                 case AuthResult.ExpiredMfa: return "MFA Code has Expired";
                 default: return "Unknown Error Occured";
             }
-
         }
     }
 }
