@@ -11,7 +11,7 @@ namespace elearning_platform.Services
         private readonly IAdminRepo _adminRepo;
         private bool? _isAdmin;
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public CurrentUserService(IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo)
         {

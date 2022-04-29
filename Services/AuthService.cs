@@ -15,12 +15,12 @@ namespace elearning_platform.Services
             _emailService = emailService;
         }
 
-        public async Task<bool> SendMfaAsync(User user, Mfa mfa)
+        public Task<bool> SendMfaAsync(User user, Mfa mfa)
         {
             var body = $"Here's your new code: {mfa.PinCode}";
             var subject = "Multi-Factor Auth";
             var success = _emailService.SendEmail(user.Email, body, subject);
-            return success;
+            return Task.FromResult(success);
         }
     }
 }
