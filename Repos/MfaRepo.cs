@@ -47,6 +47,7 @@ namespace elearning_platform.Repo
                 Iat = DateTime.Now.ToUniversalTime()
             };
             var success = _ctx.MFAs.Add(mfa);
+            _ctx.SaveChanges();
             return Task.FromResult<Mfa>(mfa);
         }
     }

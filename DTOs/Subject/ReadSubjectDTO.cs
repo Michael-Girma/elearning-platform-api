@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using elearning_platform.Models;
 
-namespace elearning_platform.Models
+namespace elearning_platform.DTO
 {
-    public class Subject
+    public class ReadSubjectDTO
     {
         [Key]
         public Guid SubjectId { get; set; }
@@ -14,12 +14,7 @@ namespace elearning_platform.Models
         [Required]
         public Guid CreatedBy { get; set; }
 
-        [ForeignKey("CreatedBy")]
-
-        public User CreatedByUser { get; set; }
-
         [Required]
-        [ForeignKey("EducationLevel")]
         public Guid EducationLevelId { get; set; }
 
         public EducationLevel EducationLevel { get; set; }
