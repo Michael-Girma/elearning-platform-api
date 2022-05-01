@@ -9,6 +9,6 @@ namespace elearning_platform.DTO
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public int EducationLevelId { get; set; }
+        public Guid EducationLevelId { get; set; }
     }
 }

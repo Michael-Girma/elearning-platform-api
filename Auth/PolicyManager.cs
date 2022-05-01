@@ -7,8 +7,21 @@ namespace elearning_platform.Auth
     {
         public static void SetAuthorizationPolicies(AuthorizationOptions options)
         {
-            options.AddPolicy("StudentOnly", policy => policy.RequireClaim("UserType", "Student"));
-            options.AddPolicy("AdminOnly", policy => policy.RequireClaim("UserType", "Admin"));
+            options.AddPolicy(Policies.StudentOnly, policy => policy.RequireClaim("UserType", "STUDENT"));
+            options.AddPolicy(Policies.AdminOnly, policy => policy.RequireClaim("UserType", "ADMIN"));
+            options.AddPolicy(Policies.TutorOrAdmin, policyBuilder => policyBuilder.RequireAssertion(
+                context => context.User.HasClaim(claim =>
+                            claim.Type == "TUTOR"
+                            || claim.Type == "ADMIN"))
+            );
         }
+    }
+
+    public static class Policies
+    {
+        public const string StudentOnly = "StudentOnly";
+        public const string AdminOnly = "AdminOnly";
+        public const string TutorOnly = "TutorOnly";
+        public const string TutorOrAdmin = "TutorOrAdmin";
     }
 }
