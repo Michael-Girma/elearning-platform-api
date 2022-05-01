@@ -24,8 +24,9 @@ namespace elearning_platform.Controllers.Auth
         private readonly IAdminRepo _adminRepo;
         private readonly ICurrentUserService _currentUserService;
         private readonly IFileService _fs;
+        private readonly ITutorRepo _tutorRepo;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IFileService fs, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService, IOnboardingService onboardingService)
+        public AuthController(IJWTManagerRepository jwtRepo, ITutorRepo tutorRepo, IFileService fs, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService, IOnboardingService onboardingService)
         {
             _jwtRepo = jwtRepo;
             _authService = authService;
@@ -37,6 +38,7 @@ namespace elearning_platform.Controllers.Auth
             _adminRepo = adminRepo;
             _claimRepo = claimRepo;
             _fs = fs;
+            _tutorRepo = tutorRepo;
         }
 
         [HttpPost]
@@ -151,6 +153,43 @@ namespace elearning_platform.Controllers.Auth
             }
         }
 
+        [HttpPost]
+        [Route("tutor/login")]
+        public async Task<ActionResult<LoginAdminDTO>> LoginTutor(LoginDTO readUserDto)
+        {
+            try
+            {
+                var auth = await _jwtRepo.Authenticate(readUserDto);
+                if (auth.Result == AuthResult.MfaCodeIssued)
+                {
+                    return Ok("Please check your email for MFA code");
+                }
+                else
+                {
+                    var token = auth.JwtToken;
+                    var admin = _tutorRepo.GetTutorByUid(token.Uid);
+                    if (admin == null)
+                    {
+                        return Forbid("UserData Not Found");
+                    }
+                    var loginDTO = new ReadLoginTutorDTO { Tutor = admin, Auth = token };
+
+                    return Ok(loginDTO);
+                }
+            }
+            catch (AuthException e)
+            {
+                if (e.Result == AuthResult.WrongMfaCode)
+                    return Forbid(e.Result.ToString());
+                else
+                {
+                    return Unauthorized(e.Result.ToString());
+                }
+            }
+        }
+
+
+
         [HttpGet]
         [Route("ping")]
         public StudentSignupDTO Ping()
@@ -175,5 +214,7 @@ namespace elearning_platform.Controllers.Auth
                 return BadRequest(e);
             }
         }
+
+
     }
 }
