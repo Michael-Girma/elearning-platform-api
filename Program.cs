@@ -46,7 +46,11 @@ builder.Services.AddAuthorization(options => PolicyManager.SetAuthorizationPolic
 //App Database Context
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connectionString = "Server=127.0.0.1;Port=5432;Database=Elearning;User Id=postgres;Password=pgAdmin;";
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if (connectionString == null)
+    {
+        throw new Exception("DATABASE_URL env var is not set");
+    }
     options.UseNpgsql(connectionString);
 });
 
