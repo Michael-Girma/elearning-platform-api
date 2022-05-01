@@ -22,5 +22,9 @@ namespace elearning_platform.Data
         public DbSet<InternalFileMetadata> InternalFiles { get; set; }
 
         public DbSet<Tutor> Tutors { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<TaughtSubject> TaughtSubjects { get; set; }
+
     }
 }
