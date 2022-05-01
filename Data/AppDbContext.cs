@@ -20,5 +20,7 @@ namespace elearning_platform.Data
         public DbSet<Mfa> MFAs { get; set; }
 
         public DbSet<InternalFileMetadata> InternalFiles { get; set; }
+
+        public DbSet<Tutor> Tutors { get; set; }
     }
 }

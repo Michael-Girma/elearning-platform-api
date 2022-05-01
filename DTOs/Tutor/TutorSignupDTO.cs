@@ -1,30 +1,25 @@
 using System.ComponentModel.DataAnnotations;
-using elearning_platform.Models;
 
 namespace elearning_platform.DTO
 {
-    public class ReadUserDTO
+    public class TutorSignupDTO
     {
-        [Key]
-        public Guid Uid { get; set; }
-
         [Required]
         public string Username { get; set; }
+        [Required]
 
         public string FirstName { get; set; }
+        [Required]
 
         public string LastName { get; set; }
-
         [Required]
+
         public string Email { get; set; }
+        [Required]
 
         public string PhoneNumber { get; set; }
-
         [Required]
-        public string password { get; set; }
 
-        public bool emailVerified { get; set; }
-
-        public bool banned { get; set; }
+        public string Password { get; set; }
     }
 }

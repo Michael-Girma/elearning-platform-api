@@ -5,7 +5,7 @@ namespace elearning_platform.DTO
     public class SignupDTO
     {
         [Key]
-        public int Uid { get; set; }
+        public Guid Uid { get; set; }
 
         [Required]
         public string Username { get; set; }

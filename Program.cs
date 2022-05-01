@@ -59,11 +59,14 @@ builder.Services.AddScoped<IAdminRepo, AdminRepo>();
 builder.Services.AddScoped<IMfaRepo, MfaRepo>();
 builder.Services.AddScoped<IClaimRepo, ClaimRepo>();
 builder.Services.AddScoped<IFileRepo, FileRepo>();
+builder.Services.AddScoped<ITutorRepo, TutorRepo>();
+
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

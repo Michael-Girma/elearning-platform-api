@@ -7,9 +7,9 @@ namespace elearning_platform.Models
     {
         [Key]
 
-        public Guid tutorId { get; set; }
+        public Guid TutorId { get; set; }
 
-        public bool verified { get; set; } = false;
+        public bool Verified { get; set; } = false;
 
         [ForeignKey("User")]
         public Guid Uid { get; set; }

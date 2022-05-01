@@ -5,5 +5,6 @@ namespace elearning_platform.Repo
     public interface IClaimRepo
     {
         Student AddClaimForStudent(Student student);
+        Tutor AddClaimForTutor(Tutor tutor);
     }
 }

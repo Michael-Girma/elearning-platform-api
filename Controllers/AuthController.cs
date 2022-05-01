@@ -17,6 +17,7 @@ namespace elearning_platform.Controllers.Auth
         private readonly IJWTManagerRepository _jwtRepo;
         private readonly IUserRepo _userRepo;
         private readonly IAuthService _authService;
+        private readonly IOnboardingService _onboardingService;
         private readonly IStudentRepo _studentRepo;
         private readonly IMapper _mapper;
         private readonly IClaimRepo _claimRepo;
@@ -24,16 +25,17 @@ namespace elearning_platform.Controllers.Auth
         private readonly ICurrentUserService _currentUserService;
         private readonly IFileService _fs;
 
-        public AuthController(IJWTManagerRepository jwtRepo, IFileService fs, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService)
+        public AuthController(IJWTManagerRepository jwtRepo, IFileService fs, IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, IMapper mapper, IAuthService authService, IClaimRepo claimRepo, ICurrentUserService currentUserService, IOnboardingService onboardingService)
         {
             _jwtRepo = jwtRepo;
+            _authService = authService;
+            _currentUserService = currentUserService;
+            _onboardingService = onboardingService;
             _userRepo = userRepo;
             _studentRepo = studentRepo;
-            _authService = authService;
             _mapper = mapper;
             _adminRepo = adminRepo;
             _claimRepo = claimRepo;
-            _currentUserService = currentUserService;
             _fs = fs;
         }
 
@@ -134,6 +136,21 @@ namespace elearning_platform.Controllers.Auth
             return Ok(student);
         }
 
+        [HttpPost]
+        [Route("tutor/signup")]
+        public ActionResult OnboardTutor(SignupDTO signupDTO)
+        {
+            try
+            {
+                var tutorModel = _onboardingService.SignupTutor(signupDTO);
+                return Ok(tutorModel);
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e);
+            }
+        }
+
         [HttpGet]
         [Route("ping")]
         public StudentSignupDTO Ping()
@@ -146,17 +163,17 @@ namespace elearning_platform.Controllers.Auth
 
         [HttpPost]
         [Route("signup")]
-        public ReadUserDTO SignupUser(SignupDTO signupDTO)
+        public ActionResult SignupUser(SignupDTO signupDTO)
         {
-            var userModel = _mapper.Map<SignupDTO, User>(signupDTO);
-            var existingUser = _userRepo.GetUserByEmail(userModel.Email);
-            if (existingUser != null)
+            try
             {
-                throw new Exception("User already exists");
+                var userModel = _onboardingService.SignupUser(signupDTO);
+                return Ok(userModel);
             }
-            var user = _userRepo.CreateUser(userModel);
-            _userRepo.SaveChanges();
-            return _mapper.Map<ReadUserDTO>(userModel);
+            catch (BadRequestException e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }
