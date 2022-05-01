@@ -6,9 +6,9 @@ namespace elearning_platform.Repo
     {
         IEnumerable<Student> GetStudents(bool includeRelations = false);
 
-        Student? GetStudentById(int studentId, bool includeRelations = false);
+        Student? GetStudentById(Guid studentId, bool includeRelations = false);
 
-        Student? GetStudentByUid(int uid, bool includeRelations = false);
+        Student? GetStudentByUid(Guid uid, bool includeRelations = false);
         Student CreateStudent(Student student);
         bool SaveChanges();
     }

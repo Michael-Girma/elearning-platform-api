@@ -6,7 +6,7 @@ namespace elearning_platform.Models
     public class User
     {
         [Key]
-        public int Uid { get; set; }
+        public Guid Uid { get; set; }
 
         [Required]
         public string Username { get; set; }

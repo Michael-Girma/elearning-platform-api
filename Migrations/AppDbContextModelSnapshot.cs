@@ -24,14 +24,12 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.Admin", b =>
                 {
-                    b.Property<int>("AdminId")
+                    b.Property<Guid>("AdminId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AdminId"));
-
-                    b.Property<int>("Uid")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
 
                     b.HasKey("AdminId");
 
@@ -42,17 +40,15 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.EducationLevel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("EducationLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Level")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("EducationLevelId");
 
                     b.ToTable("EducationLevels");
                 });
@@ -90,8 +86,8 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UploadedByUid")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("UploadedByUid")
+                        .HasColumnType("uuid");
 
                     b.HasKey("FileId");
 
@@ -102,11 +98,11 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.Mfa", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
@@ -117,30 +113,28 @@ namespace elearning_platform.Migrations
                     b.Property<int>("PinCode")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Uid")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.ToTable("MFAs");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.Student", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<Guid>("StudentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StudentId"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("EducationLevelId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("EducationLevelId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("Uid")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
 
                     b.HasKey("StudentId");
 
@@ -153,11 +147,9 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.User", b =>
                 {
-                    b.Property<int>("Uid")
+                    b.Property<Guid>("Uid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Uid"));
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Banned")
                         .HasColumnType("boolean");
@@ -196,18 +188,16 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.UserClaim", b =>
                 {
-                    b.Property<int>("UserClaimId")
+                    b.Property<Guid>("UserClaimId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserClaimId"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Claim")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Uid")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Value")
                         .IsRequired()

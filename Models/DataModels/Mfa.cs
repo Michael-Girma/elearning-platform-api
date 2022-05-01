@@ -6,10 +6,10 @@ namespace elearning_platform.Models
     public class Mfa
     {
         [Key]
-        public int Id { get; set; }
+        public int Guid { get; set; }
 
         [ForeignKey("User")]
-        public int Uid { get; set; }
+        public Guid Uid { get; set; }
 
         public DateTime ExpiresAt { get; set; }
 

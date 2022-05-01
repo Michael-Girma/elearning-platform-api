@@ -15,13 +15,13 @@ namespace elearning_platform.Repo
         }
 
 
-        public Admin? GetAdminByAdminId(int adminId)
+        public Admin? GetAdminByAdminId(Guid adminId)
         {
             var admin = _ctx.Admins.Include(a => a.User).FirstOrDefault(admin => admin.AdminId == adminId);
             return admin;
         }
 
-        public Admin? GetAdminByUid(int uid)
+        public Admin? GetAdminByUid(Guid uid)
         {
             var admin = _ctx.Admins.Include(a => a.User).FirstOrDefault(admin => admin.Uid == uid);
             return admin;

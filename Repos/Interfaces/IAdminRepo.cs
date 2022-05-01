@@ -4,9 +4,9 @@ namespace elearning_platform.Repo
 {
     public interface IAdminRepo
     {
-        Admin? GetAdminByAdminId(int adminId);
+        Admin? GetAdminByAdminId(Guid adminId);
 
-        Admin? GetAdminByUid(int uid);
+        Admin? GetAdminByUid(Guid uid);
 
         bool SaveChanges();
     }

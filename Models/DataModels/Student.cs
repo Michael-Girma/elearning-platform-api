@@ -6,15 +6,15 @@ namespace elearning_platform.Models
     public class Student
     {
         [Key]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 
         [ForeignKey("EducationLevel")]
-        public int EducationLevelId { get; set; }
+        public Guid EducationLevelId { get; set; }
 
         [ForeignKey("User")]
-        public int Uid { get; set; }
+        public Guid Uid { get; set; }
 
 
         public User User { get; set; }

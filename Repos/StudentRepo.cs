@@ -14,12 +14,12 @@ namespace elearning_platform.Repo
             _ctx = context;
         }
 
-        public Student? GetStudentById(int studentId, bool includeRelations = false)
+        public Student? GetStudentById(Guid studentId, bool includeRelations = false)
         {
             throw new NotImplementedException();
         }
 
-        public Student? GetStudentByUid(int uid, bool includeRelations = false)
+        public Student? GetStudentByUid(Guid uid, bool includeRelations = false)
         {
             var students = includeRelations ?
                 _ctx.Students.Include(s => s.User).Include(s => s.EducationLevel)

@@ -4,7 +4,7 @@ namespace elearning_platform.Repo
 {
     public interface IUserRepo
     {
-        User? GetUserById(int id, bool includeClaims = false);
+        User? GetUserById(Guid id, bool includeClaims = false);
         User? GetUserByUsername(string username, bool includeClaims = false);
 
         IEnumerable<User> GetUsers();

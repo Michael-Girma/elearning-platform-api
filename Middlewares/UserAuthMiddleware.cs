@@ -19,7 +19,7 @@ namespace elearning_platform.Middlewares
             var uid = context.User.GetUserId();
             if (uid != null)
             {
-                currentUserService.SetUser((int)uid);
+                currentUserService.SetUser(uid ?? Guid.Empty);
             }
 
             await _next(context);

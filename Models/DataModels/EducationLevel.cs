@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace elearning_platform.Models
 {
     public class EducationLevel
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid EducationLevelId { get; set; }
         public string Level { get; set; }
     }
 }

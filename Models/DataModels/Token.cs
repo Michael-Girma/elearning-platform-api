@@ -6,6 +6,6 @@ namespace elearning_platform.Models
 
         public string RefreshToken { get; set; }
 
-        public int Uid { get; set; }
+        public Guid Uid { get; set; }
     }
 }

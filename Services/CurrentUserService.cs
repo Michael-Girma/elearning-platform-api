@@ -55,7 +55,7 @@ namespace elearning_platform.Services
             }
         }
 
-        public void SetUser(int uid)
+        public void SetUser(Guid uid)
         {
             User = _userRepo.GetUserById(uid);
         }

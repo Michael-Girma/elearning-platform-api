@@ -9,6 +9,6 @@ namespace elearning_platform.Services
 
         bool isAdmin { get; }
 
-        void SetUser(int uid);
+        void SetUser(Guid uid);
     }
 }

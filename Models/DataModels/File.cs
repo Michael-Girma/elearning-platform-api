@@ -11,7 +11,7 @@ namespace elearning_platform.Models
         [Required]
         public string ExternalId { get; set; }
 
-        public int? UploadedByUid { get; set; }
+        public Guid? UploadedByUid { get; set; }
 
         [ForeignKey("UploadedByUid")]
         public User? UploadedBy { get; set; }
