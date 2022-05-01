@@ -20,6 +20,8 @@ namespace elearning_platform.Models
 
         public Subject Subject { get; set; }
 
+        public string TopicsCovered { get; set; }
+
         public float PricePerHour { get; set; }
 
         public bool TaughtOnline { get; set; }

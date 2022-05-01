@@ -8,7 +8,7 @@ namespace elearning_platform.Repo
     public class MfaRepo : IMfaRepo
     {
         private readonly AppDbContext _ctx;
-        private int EXPIRE_TIME = 300; //TODO: move this to auth config and parse in cs file
+        private int EXPIRE_TIME = 300000; //TODO: move this to auth config and parse in cs file
 
         public MfaRepo(AppDbContext ctx)
         {

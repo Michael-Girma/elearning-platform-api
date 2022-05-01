@@ -20,9 +20,6 @@ namespace elearning_platform.DTO
 
         public string PhoneNumber { get; set; }
 
-        [Required]
-        public string password { get; set; }
-
         public bool emailVerified { get; set; }
 
         public bool banned { get; set; }

@@ -7,8 +7,9 @@ namespace elearning_platform.Auth
     {
         public static void SetAuthorizationPolicies(AuthorizationOptions options)
         {
-            options.AddPolicy(Policies.StudentOnly, policy => policy.RequireClaim("UserType", "STUDENT"));
-            options.AddPolicy(Policies.AdminOnly, policy => policy.RequireClaim("UserType", "ADMIN"));
+            options.AddPolicy(Policies.StudentOnly, policy => policy.RequireClaim("STUDENT"));
+            options.AddPolicy(Policies.AdminOnly, policy => policy.RequireClaim("ADMIN"));
+            options.AddPolicy(Policies.TutorOnly, policy => policy.RequireClaim("TUTOR"));
             options.AddPolicy(Policies.TutorOrAdmin, policyBuilder => policyBuilder.RequireAssertion(
                 context => context.User.HasClaim(claim =>
                             claim.Type == "TUTOR"

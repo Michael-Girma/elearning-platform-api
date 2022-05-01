@@ -13,12 +13,14 @@ namespace elearning_platform.Controllers
     {
         private readonly ISubjectService _subjectService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ITaughtSubjectService _taughtSubjectService;
         private readonly IMapper _mapper;
 
-        public SubjectController(ISubjectService subjectService, ICurrentUserService currentUserService, IMapper mapper)
+        public SubjectController(ISubjectService subjectService, ICurrentUserService currentUserService, IMapper mapper, ITaughtSubjectService taughtSubjectService)
         {
             _subjectService = subjectService;
             _currentUserService = currentUserService;
+            _taughtSubjectService = taughtSubjectService;
             _mapper = mapper;
         }
 
@@ -31,6 +33,16 @@ namespace elearning_platform.Controllers
             var createdSubject = _subjectService.CreateSubject(user!, createSubjectDTO);
             var readSubjectDTO = _mapper.Map<ReadSubjectDTO>(createdSubject);
             return Ok(readSubjectDTO);
+        }
+
+        [HttpPost]
+        [Route("teach")]
+        [Authorize(Policy = Policies.TutorOnly)]
+        public ActionResult TeachSubject(CreateTaughtSubjectDTO createTaughtSubjectDTO)
+        {
+            var user = _currentUserService.User;
+            var taughtSubject = _taughtSubjectService.CreateTaughtSubject(user!, createTaughtSubjectDTO);
+            return Ok(_mapper.Map<ReadTaughtSubjectDTO>(taughtSubject));
         }
     }
 }
