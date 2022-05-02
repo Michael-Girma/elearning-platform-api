@@ -24,7 +24,14 @@ namespace elearning_platform.Data
         public DbSet<Tutor> Tutors { get; set; }
 
         public DbSet<Subject> Subjects { get; set; }
+
         public DbSet<TaughtSubject> TaughtSubjects { get; set; }
 
+        public DbSet<TutorRequest> TutorRequests { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+
+        public DbSet<OnlineSession> OnlineSession { get; set; }
+
+        public DbSet<PaymentOrder> PaymentOrders { get; set; }
     }
 }
