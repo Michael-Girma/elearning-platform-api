@@ -20,5 +20,15 @@ namespace elearning_platform.Repo
             _ctx.SaveChanges();
             return taughtSubject;
         }
+
+        public TaughtSubject? GetTaughtSubjectById(Guid id)
+        {
+            return _ctx.TaughtSubjects.FirstOrDefault(e => e.TaughtSubjectId == id);
+        }
+
+        public IEnumerable<TaughtSubject> GetTaughtSubjectBySid(Guid subjectId)
+        {
+            return _ctx.TaughtSubjects.Where(e => e.SubjectId == subjectId).ToList();
+        }
     }
 }

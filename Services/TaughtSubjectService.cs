@@ -8,14 +8,12 @@ namespace elearning_platform.Services
 {
     public class TaughtSubjectService : ITaughtSubjectService
     {
-        private readonly AppDbContext _ctx;
         private readonly ITaughtSubjectRepo _taughtSubjectRepo;
         private readonly IMapper _mapper;
         private readonly ITutorRepo _tutorRepo;
 
         public TaughtSubjectService(AppDbContext ctx, ITaughtSubjectRepo taughtSubjectRepo, IMapper mapper, ITutorRepo tutorRepo)
         {
-            _ctx = ctx;
             _taughtSubjectRepo = taughtSubjectRepo;
             _mapper = mapper;
             _tutorRepo = tutorRepo;
@@ -32,6 +30,11 @@ namespace elearning_platform.Services
             taughtSubjectModel.TutorId = tutor.TutorId;
             _taughtSubjectRepo.CreateTaughtSubject(taughtSubjectModel);
             return taughtSubjectModel;
+        }
+
+        public IEnumerable<TaughtSubject> GetTaughtSubjectBySid(Guid subjectId)
+        {
+            return _taughtSubjectRepo.GetTaughtSubjectBySid(subjectId);
         }
     }
 }

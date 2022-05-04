@@ -66,7 +66,7 @@ builder.Services.AddScoped<IFileRepo, FileRepo>();
 builder.Services.AddScoped<ITutorRepo, TutorRepo>();
 builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
 builder.Services.AddScoped<ITaughtSubjectRepo, TaughtSubjectRepo>();
-
+builder.Services.AddScoped<ITutorRequestRepo, TutorRequestRepo>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -75,6 +75,8 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITaughtSubjectService, TaughtSubjectService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

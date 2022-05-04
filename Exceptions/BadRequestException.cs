@@ -15,6 +15,5 @@ namespace elearning_platform.Exceptions
             StatusCode = code;
         }
 
-
     }
 }

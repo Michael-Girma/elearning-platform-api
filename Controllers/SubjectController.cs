@@ -44,5 +44,13 @@ namespace elearning_platform.Controllers
             var taughtSubject = _taughtSubjectService.CreateTaughtSubject(user!, createTaughtSubjectDTO);
             return Ok(_mapper.Map<ReadTaughtSubjectDTO>(taughtSubject));
         }
+
+        [HttpGet]
+        [Route("{subId}/taught_subjects}")]
+        [Authorize]
+        public ActionResult GetTutorsForSubject(Guid subjectId)
+        {
+            return Ok(_taughtSubjectService.GetTaughtSubjectBySid(subjectId));
+        }
     }
 }
