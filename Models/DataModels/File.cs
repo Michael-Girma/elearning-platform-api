@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.Models
 {
-    public class InternalFileMetadata
+    public class InternalFileMetadata : BaseEntity
     {
         [Key]
         public Guid FileId { get; set; }

@@ -47,6 +47,7 @@ builder.Services.AddAuthorization(options => PolicyManager.SetAuthorizationPolic
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+
     if (connectionString == null)
     {
         throw new Exception("DATABASE_URL env var is not set");

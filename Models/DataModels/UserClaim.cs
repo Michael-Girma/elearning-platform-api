@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.Models
 {
-    public class UserClaim
+    public class UserClaim : BaseEntity
     {
         [Key]
         public Guid UserClaimId { get; set; }

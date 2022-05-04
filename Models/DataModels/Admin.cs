@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.Models
 {
-    public class Admin
+    public class Admin : BaseEntity
     {
         public Guid AdminId { get; set; }
 

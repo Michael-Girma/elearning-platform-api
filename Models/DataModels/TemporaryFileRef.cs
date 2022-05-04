@@ -1,6 +1,6 @@
 namespace elearning_platform.Models
 {
-    public class TemporaryFileRef
+    public class TemporaryFileRef : BaseEntity
     {
         public Guid FileId { get; set; }
         public string ContentHash { get; set; }

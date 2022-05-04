@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.Models
 {
-    public class Subject
+    public class Subject : BaseEntity
     {
         [Key]
         public Guid SubjectId { get; set; }

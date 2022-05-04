@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.Models
 {
-    public class Mfa
+    public class Mfa : BaseEntity
     {
         [Key]
         public int Guid { get; set; }

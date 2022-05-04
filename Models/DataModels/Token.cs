@@ -1,6 +1,6 @@
 namespace elearning_platform.Models
 {
-    public class JWTToken
+    public class JWTToken : BaseEntity
     {
         public string Token { get; set; }
 

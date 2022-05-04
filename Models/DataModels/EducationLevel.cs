@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace elearning_platform.Models
 {
-    public class EducationLevel
+    public class EducationLevel : BaseEntity
     {
         [Key]
         public Guid EducationLevelId { get; set; }
