@@ -9,8 +9,9 @@ namespace elearning_platform.Services
     public class TaughtSubjectService : ITaughtSubjectService
     {
         private readonly ITaughtSubjectRepo _taughtSubjectRepo;
-        private readonly IMapper _mapper;
         private readonly ITutorRepo _tutorRepo;
+        private readonly IMapper _mapper;
+        private readonly ITutorRequestRepo _tutorRequestRepo;
 
         public TaughtSubjectService(AppDbContext ctx, ITaughtSubjectRepo taughtSubjectRepo, IMapper mapper, ITutorRepo tutorRepo)
         {

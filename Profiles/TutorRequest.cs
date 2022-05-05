@@ -10,6 +10,7 @@ namespace elearning_platform.Profiles
         {
             CreateMap<CreateTutorRequestDTO, TutorRequest>();
             CreateMap<TutorRequest, ReadTutorRequestDTO>();
+            CreateMap<UpdateTutorRequestDTO, TutorRequest>();
         }
     }
 }

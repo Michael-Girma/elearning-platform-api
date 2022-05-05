@@ -23,8 +23,9 @@ namespace elearning_platform.Services
             var tutorRequestModel = _mapper.Map<TutorRequest>(requestDTO);
             tutorRequestModel.StudentId = student.StudentId;
             var taughtSubject = _taughtSubjectRepo.GetTaughtSubjectById(requestDTO.TaughtSubjectId);
-            if (taughtSubject == null)
+            if (taughtSubject != null)
             {
+                tutorRequestModel.Status = TutorRequest.RequestStatusValues.AwaitingTutor.ToString();
                 _tutorRequestRepo.CreateTutorRequest(tutorRequestModel);
                 return tutorRequestModel;
             }
@@ -34,6 +35,19 @@ namespace elearning_platform.Services
                 var statusCode = "TAUGHT SUBJECT DOES NOT EXIST";
                 throw new BadRequestException(statusDescription, statusCode);
             }
+        }
+
+
+        public TutorRequest UpdateTutorRequest(Guid id, User user, UpdateTutorRequestDTO updateTutorRequestDTO)
+        {
+            var request = _tutorRequestRepo.GetTutorRequestsForUser(user.Uid).FirstOrDefault(e => e.TutorRequestId == id);
+            if (request == null)
+            {
+                throw new RequestUnauthorizedException("User isn't authorized to access resource");
+            }
+            var newTutorRequest = _mapper.Map<UpdateTutorRequestDTO, TutorRequest>(updateTutorRequestDTO, request);
+            var savedModel = _tutorRequestRepo.UpdateRequest(newTutorRequest);
+            return newTutorRequest;
         }
     }
 }

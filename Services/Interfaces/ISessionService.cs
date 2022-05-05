@@ -6,6 +6,7 @@ namespace elearning_platform.Services
     public interface ISessionService
     {
         TutorRequest? CreateTutorRequest(Student student, CreateTutorRequestDTO requestDTO);
-        // TutorRequest UpdateTutorRequest()
+        TutorRequest UpdateTutorRequest(Guid id, User user, UpdateTutorRequestDTO updateTutorRequestDTO);
+
     }
 }

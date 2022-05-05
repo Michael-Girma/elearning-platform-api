@@ -33,5 +33,14 @@ namespace elearning_platform.Controllers
             var tutorRequestModel = _sessionService.CreateTutorRequest(student!, createTutorRequestDTO);
             return Ok(tutorRequestModel);
         }
+
+        [HttpPut]
+        [Authorize]
+        [Route("{taughtSubjectId}")]
+        public ActionResult UpdateRequest(UpdateTutorRequestDTO requestDTO)
+        {
+            // var user =  
+            return Ok();
+        }
     }
 }

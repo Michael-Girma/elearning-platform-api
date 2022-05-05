@@ -1,14 +1,12 @@
 using System.ComponentModel.DataAnnotations;
-using static elearning_platform.Models.TutorRequest;
+using elearning_platform.Attributes.Validation;
+
 namespace elearning_platform.DTO
 {
-    public class CreateTutorRequestDTO
+    public class UpdateTutorRequestDTO
     {
         [Required]
         public bool OnlineSession { get; set; }
-
-        [Required]
-        public Guid TaughtSubjectId { get; set; }
 
         [Required]
         public int SessionLength { get; set; }
@@ -18,5 +16,7 @@ namespace elearning_platform.DTO
 
         [Required]
         public string Note { get; set; }
+
+        public virtual string Status { get; set; }
     }
 }

@@ -34,5 +34,14 @@ namespace elearning_platform.Models
         public string Note { get; set; }
 
         public ICollection<OnlineSession> OnlineSessions { get; set; }
+
+        public enum RequestStatusValues
+        {
+            AwaitingTutor,
+            AwaitingStudent,
+            Accepted,
+            Rejected,
+            Cancelled
+        }
     }
 }

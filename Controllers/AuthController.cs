@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using elearning_platform.Repo;
 using elearning_platform.Services;
 using elearning_platform.Exceptions;
+using elearning_platform.Attributes.Validation;
 using AutoMapper;
 
 namespace elearning_platform.Controllers.Auth

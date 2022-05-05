@@ -11,6 +11,6 @@ namespace elearning_platform.Repo
 
         TutorRequest CreateTutorRequest(TutorRequest request);
 
-
+        TutorRequest? UpdateRequest(TutorRequest request);
     }
 }

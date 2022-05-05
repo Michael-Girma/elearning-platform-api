@@ -46,7 +46,7 @@ namespace elearning_platform.Controllers
         }
 
         [HttpGet]
-        [Route("{subId}/taught_subjects}")]
+        [Route("{subjectId}/taught_subjects")]
         [Authorize]
         public ActionResult GetTutorsForSubject(Guid subjectId)
         {
