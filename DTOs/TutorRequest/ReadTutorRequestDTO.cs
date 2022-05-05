@@ -21,6 +21,6 @@ namespace elearning_platform.DTO
 
         public string Note { get; set; }
 
-        public ICollection<OnlineSession> OnlineSessions { get; set; }
+        public ICollection<ReadSessionDTO> Sessions { get; set; }
     }
 }

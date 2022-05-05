@@ -49,6 +49,7 @@ namespace elearning_platform.Repo
                 return null;
             }
             _ctx.Entry(entity).CurrentValues.SetValues(request);
+            _ctx.SaveChanges();
             return request;
         }
     }

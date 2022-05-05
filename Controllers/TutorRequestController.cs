@@ -41,5 +41,15 @@ namespace elearning_platform.Controllers
             var tutorRequest = _sessionService.UpdateTutorRequest(tutorRequestId, user!, updateTutorRequest);
             return Ok(tutorRequest);
         }
+
+        [HttpPost]
+        [Authorize(Policy = Policies.TutorOnly)]
+        [Route("{tutorRequestId}/accept")]
+        public ActionResult AcceptTutorRequest(Guid tutorRequestId)
+        {
+            var tutor = _currentUserService.GetTutor();
+            var acceptedTutorRequest = _sessionService.SetupAcceptedTutorRequest(tutorRequestId, tutor!);
+            return Ok(_mapper.Map<ReadTutorRequestDTO>(acceptedTutorRequest));
+        }
     }
 }

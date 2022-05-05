@@ -20,6 +20,6 @@ namespace elearning_platform.Models
 
         public Session Session { get; set; }
 
-        public string VideoChatLink { get; set; }
+        public string? VideoChatLink { get; set; }
     }
 }

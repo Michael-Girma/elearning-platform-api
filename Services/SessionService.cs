@@ -49,5 +49,49 @@ namespace elearning_platform.Services
             var savedModel = _tutorRequestRepo.UpdateRequest(newTutorRequest);
             return newTutorRequest;
         }
+
+        public TutorRequest SetupAcceptedTutorRequest(Guid id, Tutor tutor)
+        {
+            var request = _tutorRequestRepo.GetTutorRequestsForTutor(tutor.TutorId).FirstOrDefault(e => e.TutorRequestId == id);
+            if (request == null)
+            {
+                throw new RequestUnauthorizedException("User isn't authorized to access resource");
+            }
+            if (request.Status == TutorRequest.RequestStatusValues.Accepted.ToString())
+            {
+                throw new BadRequestException("Tutor Request Has Already Been Accepted");
+            }
+            request.Status = TutorRequest.RequestStatusValues.Accepted.ToString();
+            request.Sessions = CreateSessionsFromTutorRequest(request);
+            _tutorRequestRepo.UpdateRequest(request);
+            return request;
+        }
+
+        public ICollection<Session> CreateSessionsFromTutorRequest(TutorRequest tutorRequest)
+        {
+            var sessions = new List<Session>();
+            foreach (var date in tutorRequest.PreferredDates)
+            {
+                var newSession = new Session()
+                {
+                    TutorRequestId = tutorRequest.TutorRequestId,
+                    BookedTime = date,
+                    BookingStatus = Session.BookingStatuses.AwaitingInitialPayment.ToString(),
+                    PaymentStatus = Session.PaymentStatuses.AwaitingPayment.ToString(),
+                };
+                if (tutorRequest.OnlineSession)
+                {
+                    newSession.OnlineSession = new OnlineSession()
+                    {
+                        PaymentOrder = new PaymentOrder()
+                        {
+                            OrderStatus = PaymentOrder.OrderStatuses.Unpaid.ToString()
+                        }
+                    };
+                }
+                sessions.Add(newSession);
+            }
+            return sessions;
+        }
     }
 }

@@ -20,7 +20,6 @@ namespace elearning_platform.Models
 
         [Required]
         public string Status { get; set; }
-        //AWAITING_STUDENT || AWAITING_TUTOR || ACCEPTED
         [Required]
         public bool OnlineSession { get; set; }
 
@@ -33,7 +32,7 @@ namespace elearning_platform.Models
         [Required]
         public string Note { get; set; }
 
-        public ICollection<OnlineSession> OnlineSessions { get; set; }
+        public ICollection<Session> Sessions { get; set; }
 
         public enum RequestStatusValues
         {

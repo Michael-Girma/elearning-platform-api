@@ -9,8 +9,11 @@ namespace elearning_platform.Profiles
         public TutorRequestProfile()
         {
             CreateMap<CreateTutorRequestDTO, TutorRequest>();
-            CreateMap<TutorRequest, ReadTutorRequestDTO>();
             CreateMap<UpdateTutorRequestDTO, TutorRequest>();
+            CreateMap<TutorRequest, ReadTutorRequestDTO>()
+            .AfterMap((src, dest) => dest.TaughtSubject.Tutor = null);
+            // CreateMap<TutorRequest, ReadTutorRequestDTO>();
+
         }
     }
 }

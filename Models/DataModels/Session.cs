@@ -18,6 +18,25 @@ namespace elearning_platform.Models
         public string PaymentStatus { get; set; }
 
         [Required]
+        public DateTime BookedTime { get; set; }
+
+        [Required]
         public string BookingStatus { get; set; }
+
+        public OnlineSession? OnlineSession { get; set; }
+
+        public enum PaymentStatuses
+        {
+            Paid,
+            AwaitingPayment,
+            ToBePostPaid
+        }
+
+        public enum BookingStatuses
+        {
+            Booked,
+            Cancelled,
+            AwaitingInitialPayment
+        }
     }
 }

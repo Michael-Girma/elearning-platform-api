@@ -6,6 +6,7 @@ namespace elearning_platform.Services
     {
         User? User { get; set; }
         Student? GetStudent();
+        Tutor? GetTutor();
 
         bool isAdmin { get; }
 

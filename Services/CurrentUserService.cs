@@ -8,22 +8,33 @@ namespace elearning_platform.Services
     {
         private readonly IUserRepo _userRepo;
         private readonly IStudentRepo _studentRepo;
+        private readonly ITutorRepo _tutorRepo;
         private readonly IAdminRepo _adminRepo;
         private bool? _isAdmin;
 
         public User? User { get; set; }
 
-        public CurrentUserService(IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo)
+        public CurrentUserService(IUserRepo userRepo, IStudentRepo studentRepo, IAdminRepo adminRepo, ITutorRepo tutorRepo)
         {
             _userRepo = userRepo;
             _studentRepo = studentRepo;
             _adminRepo = adminRepo;
+            _tutorRepo = tutorRepo;
         }
         public Student? GetStudent()
         {
             if (User != null)
             {
                 return _studentRepo.GetStudentByUid(User.Uid);
+            }
+            return null;
+        }
+
+        public Tutor? GetTutor()
+        {
+            if (User != null)
+            {
+                return _tutorRepo.GetTutorByUid(User.Uid);
             }
             return null;
         }

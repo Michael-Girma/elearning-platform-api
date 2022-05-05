@@ -8,5 +8,7 @@ namespace elearning_platform.Services
         TutorRequest? CreateTutorRequest(Student student, CreateTutorRequestDTO requestDTO);
         TutorRequest UpdateTutorRequest(Guid id, User user, UpdateTutorRequestDTO updateTutorRequestDTO);
 
+        TutorRequest SetupAcceptedTutorRequest(Guid id, Tutor tutor);
+
     }
 }
