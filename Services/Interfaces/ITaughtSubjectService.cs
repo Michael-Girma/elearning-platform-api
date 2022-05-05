@@ -6,5 +6,6 @@ namespace elearning_platform.Services
     public interface ITaughtSubjectService
     {
         TaughtSubject CreateTaughtSubject(User user, CreateTaughtSubjectDTO taughtSubjectDTO);
+        IEnumerable<TaughtSubject> GetTaughtSubjectBySid(Guid subjectId);
     }
 }

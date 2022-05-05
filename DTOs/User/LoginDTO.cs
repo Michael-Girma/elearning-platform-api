@@ -1,3 +1,5 @@
+using elearning_platform.Attributes.Validation;
+
 namespace elearning_platform.DTO
 {
     public class LoginDTO
@@ -7,6 +9,5 @@ namespace elearning_platform.DTO
         public int? pinCode { get; set; }
 
         public string Password { get; set; }
-
     }
 }
