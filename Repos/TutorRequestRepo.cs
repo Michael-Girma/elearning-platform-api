@@ -27,7 +27,7 @@ namespace elearning_platform.Repo
 
         public IEnumerable<TutorRequest> GetTutorRequestsForStudent(Guid uid)
         {
-            return _ctx.TutorRequests.Where(e => e.StudentId == uid).ToList();
+            return _ctx.TutorRequests.Where(e => e.StudentId == uid);
         }
 
         public IEnumerable<TutorRequest> GetTutorRequestsForTutor(Guid uid)
@@ -37,7 +37,7 @@ namespace elearning_platform.Repo
 
         public IEnumerable<TutorRequest> GetTutorRequestsForUser(Guid id)
         {
-            var requests = _ctx.TutorRequests.Include(e => e.TaughtSubject).Include(e => e.Student);
+            var requests = _ctx.TutorRequests.Include(e => e.TaughtSubject).Include(e => e.Student).Include(e => e.Sessions);
             return requests.Where(e => e.TaughtSubject.TutorId == id || e.Student.Uid == id);
         }
 

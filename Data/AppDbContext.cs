@@ -5,7 +5,11 @@ namespace elearning_platform.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions options) : base(options)
+        {
+            // this.ChangeTracker.LazyLoadingEnabled = true;
+            // this.ChangeTracker.
+        }
 
         public DbSet<User> Users { get; set; }
 
@@ -32,8 +36,13 @@ namespace elearning_platform.Data
 
         public DbSet<OnlineSession> OnlineSession { get; set; }
 
-        public DbSet<PaymentOrder> PaymentOrders { get; set; }
+        public DbSet<SessionOrder> SessionOrders { get; set; }
 
+        public DbSet<SessionPaymentLink> SessionPaymentLinks { get; set; }
+
+        public DbSet<PaymentDetail> PaymentDetails { get; set; }
+
+        public DbSet<PaymentAccountDetail> PaymentAccountDetails { get; set; }
         public override int SaveChanges()
         {
             OnBeforeSaving();

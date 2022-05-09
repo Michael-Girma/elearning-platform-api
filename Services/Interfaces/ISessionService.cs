@@ -10,5 +10,7 @@ namespace elearning_platform.Services
 
         TutorRequest SetupAcceptedTutorRequest(Guid id, Tutor tutor);
 
+        PaymentLink GenerateLinkForBooking(Guid tutorRequestId, Student student, CreatePaymentLinkDTO paymentLinkDTO);
+
     }
 }

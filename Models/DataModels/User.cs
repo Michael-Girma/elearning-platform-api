@@ -28,5 +28,7 @@ namespace elearning_platform.Models
         public bool Banned { get; set; }
 
         public ICollection<UserClaim> Claims { get; set; }
+
+        public PaymentAccountDetail? PaymentAccountDetail { get; set; }
     }
 }

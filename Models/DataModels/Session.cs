@@ -5,6 +5,8 @@ namespace elearning_platform.Models
 {
     public class Session : BaseEntity
     {
+        public Session(){}
+
         [Key]
         public Guid SessionId { get; set; }
 
@@ -12,10 +14,7 @@ namespace elearning_platform.Models
         [ForeignKey("TutorRequest")]
         public Guid TutorRequestId { get; set; }
 
-        public TutorRequest TutorRequest { get; set; }
-
-        [Required]
-        public string PaymentStatus { get; set; }
+        public virtual TutorRequest TutorRequest { get; set; }
 
         [Required]
         public DateTime BookedTime { get; set; }
@@ -25,18 +24,16 @@ namespace elearning_platform.Models
 
         public OnlineSession? OnlineSession { get; set; }
 
-        public enum PaymentStatuses
-        {
-            Paid,
-            AwaitingPayment,
-            ToBePostPaid
-        }
-
         public enum BookingStatuses
         {
             Booked,
             Cancelled,
             AwaitingInitialPayment
+        }
+
+        public float GetSessionCost()
+        {
+            return TutorRequest.SessionLength * TutorRequest.TaughtSubject.PricePerHour;
         }
     }
 }

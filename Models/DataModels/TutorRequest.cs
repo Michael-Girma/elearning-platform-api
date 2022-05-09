@@ -5,6 +5,11 @@ namespace elearning_platform.Models
 {
     public class TutorRequest : BaseEntity
     {
+        public TutorRequest()
+        {
+            this.Sessions = new HashSet<Session>();
+        }
+
         [Key]
         public Guid TutorRequestId { get; set; }
 
@@ -16,7 +21,7 @@ namespace elearning_platform.Models
         [Required]
         [ForeignKey("TaughtSubject")]
         public Guid TaughtSubjectId { get; set; }
-        public TaughtSubject TaughtSubject { get; set; }
+        public virtual TaughtSubject TaughtSubject { get; set; }
 
         [Required]
         public string Status { get; set; }
@@ -32,7 +37,7 @@ namespace elearning_platform.Models
         [Required]
         public string Note { get; set; }
 
-        public ICollection<Session> Sessions { get; set; }
+        public virtual ICollection<Session> Sessions { get; set; }
 
         public enum RequestStatusValues
         {

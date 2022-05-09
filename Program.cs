@@ -46,7 +46,8 @@ builder.Services.AddAuthorization(options => PolicyManager.SetAuthorizationPolic
 //App Database Context
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    // var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+    var connectionString = "Server=127.0.0.1;Port=5432;Database=Elearning;User Id=postgres;Password=pgAdmin;";
 
     if (connectionString == null)
     {
@@ -68,6 +69,7 @@ builder.Services.AddScoped<ITutorRepo, TutorRepo>();
 builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
 builder.Services.AddScoped<ITaughtSubjectRepo, TaughtSubjectRepo>();
 builder.Services.AddScoped<ITutorRequestRepo, TutorRequestRepo>();
+builder.Services.AddScoped<IPaymentLinkRepo, PaymentLinkRepo>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -77,6 +79,7 @@ builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITaughtSubjectService, TaughtSubjectService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 
 builder.Services.AddControllers().AddJsonOptions(x =>

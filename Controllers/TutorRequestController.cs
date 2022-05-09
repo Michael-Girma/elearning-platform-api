@@ -51,5 +51,16 @@ namespace elearning_platform.Controllers
             var acceptedTutorRequest = _sessionService.SetupAcceptedTutorRequest(tutorRequestId, tutor!);
             return Ok(_mapper.Map<ReadTutorRequestDTO>(acceptedTutorRequest));
         }
+
+
+        [HttpPost]
+        [Authorize(Policy = Policies.StudentOnly)]
+        [Route("{tutorRequestId}/book/generate_link")]
+        public ActionResult BookingPaymentLink(Guid tutorRequestId, CreatePaymentLinkDTO paymentLinkDTO)
+        {
+            var student = _currentUserService.GetStudent();
+            var paymentLink = _sessionService.GenerateLinkForBooking(tutorRequestId, student!, paymentLinkDTO);
+            return Ok(paymentLink);
+        }
     }
 }

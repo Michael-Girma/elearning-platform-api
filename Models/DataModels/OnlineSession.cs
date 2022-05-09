@@ -12,7 +12,11 @@ namespace elearning_platform.Models
         [ForeignKey("PaymentOrder")]
         public Guid PaymentOrderId { get; set; }
 
-        public PaymentOrder PaymentOrder { get; set; }
+        [ForeignKey("SessionOrder")]
+        public Guid SessionOrderId { get; set; }
+
+        [Required]
+        public SessionOrder SessionOrder { get; set; }
 
         [Required]
         [ForeignKey("Session")]
