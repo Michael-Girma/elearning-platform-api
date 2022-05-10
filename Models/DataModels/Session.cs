@@ -22,7 +22,7 @@ namespace elearning_platform.Models
         [Required]
         public string BookingStatus { get; set; }
 
-        public OnlineSession? OnlineSession { get; set; }
+        public virtual OnlineSession? OnlineSession { get; set; }
 
         public enum BookingStatuses
         {

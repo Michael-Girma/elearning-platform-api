@@ -13,6 +13,6 @@ namespace elearning_platform.Models
         public Guid Uid { get; set; }
 
         [Required]
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

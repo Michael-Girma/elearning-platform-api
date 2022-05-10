@@ -1,6 +1,7 @@
 using AutoMapper;
 using elearning_platform.Auth;
 using elearning_platform.DTO;
+using elearning_platform.Models;
 using elearning_platform.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,7 @@ namespace elearning_platform.Controllers
         public ActionResult AcceptTutorRequest(Guid tutorRequestId)
         {
             var tutor = _currentUserService.GetTutor();
-            var acceptedTutorRequest = _sessionService.SetupAcceptedTutorRequest(tutorRequestId, tutor!);
+            var acceptedTutorRequest = (TutorRequest)(_sessionService.SetupAcceptedTutorRequest(tutorRequestId, tutor!));
             return Ok(_mapper.Map<ReadTutorRequestDTO>(acceptedTutorRequest));
         }
 

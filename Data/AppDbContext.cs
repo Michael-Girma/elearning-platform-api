@@ -9,6 +9,7 @@ namespace elearning_platform.Data
         {
             // this.ChangeTracker.LazyLoadingEnabled = true;
             // this.ChangeTracker.
+            // base.C
         }
 
         public DbSet<User> Users { get; set; }
@@ -80,5 +81,9 @@ namespace elearning_platform.Data
                 }
             }
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder
+        .UseLazyLoadingProxies();
     }
 }

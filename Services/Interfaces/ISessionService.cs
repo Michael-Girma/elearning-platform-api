@@ -1,5 +1,6 @@
 using elearning_platform.DTO;
 using elearning_platform.Models;
+using YenePaySdk;
 
 namespace elearning_platform.Services
 {
@@ -10,7 +11,8 @@ namespace elearning_platform.Services
 
         TutorRequest SetupAcceptedTutorRequest(Guid id, Tutor tutor);
 
-        PaymentLink GenerateLinkForBooking(Guid tutorRequestId, Student student, CreatePaymentLinkDTO paymentLinkDTO);
+        SessionPaymentLink GenerateLinkForBooking(Guid tutorRequestId, Student student, CreatePaymentLinkDTO paymentLinkDTO);
 
+        Task<Session> BookSession(PaymentDetail ipn);
     }
 }

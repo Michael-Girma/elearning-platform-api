@@ -12,13 +12,13 @@ namespace elearning_platform.Models
         [ForeignKey("Tutor")]
         public Guid TutorId { get; set; }
 
-        public Tutor Tutor { get; set; }
+        public virtual Tutor Tutor { get; set; }
 
         [Required]
         [ForeignKey("Subject")]
         public Guid SubjectId { get; set; }
 
-        public Subject Subject { get; set; }
+        public virtual Subject Subject { get; set; }
 
         public string TopicsCovered { get; set; }
 

@@ -6,8 +6,9 @@ namespace elearning_platform.Services
 {
     public interface IPaymentService
     {
-        PaymentLink GeneratePaymentLink(CreatePaymentLinkDTO paymentLinkDTO, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem);
+        PaymentLink GeneratePaymentLink(PaymentLink paymentLinkDTO, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem);
+        SessionPaymentLink GenerateSessionPaymentLink(SessionPaymentLink paymentLinkDTO, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem);
 
-        bool VerifyPaymentDetail(PaymentDetail paymentDetail);
+        Task<bool> VerifyPaymentDetail(PaymentDetail paymentDetail);
     }
 }

@@ -14,9 +14,13 @@ namespace elearning_platform.Models
         [ForeignKey("PaymentDetail")]
         public Guid? PaymentDetailId { get; set; }
 
-        public ICollection<SessionPaymentLink> PaymentLinks { get; set; }
+        [ForeignKey("OnlineSession")]
+        public Guid OnlineSessionId { get; set; }
+        public virtual OnlineSession OnlineSession { get; set; }
 
-        public PaymentDetail? PaymentDetail { get; set; }
+        public virtual ICollection<SessionPaymentLink> PaymentLinks { get; set; }
+
+        public virtual PaymentDetail? PaymentDetail { get; set; }
 
         public enum OrderStatuses
         {

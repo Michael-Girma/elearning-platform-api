@@ -9,6 +9,6 @@ namespace elearning_platform.Models
         [ForeignKey("User")]
         public Guid Uid { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace elearning_platform.Models
         [Required]
         [ForeignKey("Student")]
         public Guid StudentId { get; set; }
-        public Student Student { get; set; }
+        public virtual Student Student { get; set; }
 
         [Required]
         [ForeignKey("TaughtSubject")]

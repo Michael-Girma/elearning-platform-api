@@ -70,6 +70,8 @@ builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
 builder.Services.AddScoped<ITaughtSubjectRepo, TaughtSubjectRepo>();
 builder.Services.AddScoped<ITutorRequestRepo, TutorRequestRepo>();
 builder.Services.AddScoped<IPaymentLinkRepo, PaymentLinkRepo>();
+builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
+builder.Services.AddScoped<ISessionRepo, SessionRepo>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();

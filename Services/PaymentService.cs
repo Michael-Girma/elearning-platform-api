@@ -17,17 +17,24 @@ namespace elearning_platform.Services
             _mapper = mapper;
         }
 
-        public PaymentLink GeneratePaymentLink(CreatePaymentLinkDTO paymentLinkDTO, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem)
+        public PaymentLink GeneratePaymentLink(PaymentLink paymentLink, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem)
         {
-            var paymentLink = _mapper.Map<PaymentLink>(paymentLinkDTO);
+            throw new NotImplementedException();
+
+        }
+
+        public SessionPaymentLink GenerateSessionPaymentLink(SessionPaymentLink paymentLink, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem)
+        {
             paymentLink.MerchantCode = checkoutOptions.SellerCode;
             paymentLink.Link = CheckoutHelper.GetCheckoutUrl(checkoutOptions, checkoutItem);
+            _paymentLinkRepo.CreateSessionPaymentLink(paymentLink);
             return paymentLink;
         }
 
-        public bool VerifyPaymentDetail(PaymentDetail paymentDetail)
+        public Task<bool> VerifyPaymentDetail(PaymentDetail paymentDetail)
         {
-            throw new NotImplementedException();
+            var ipn = _mapper.Map<IPNModel>(paymentDetail);
+            return CheckoutHelper.IsIPNAuthentic(ipn);
         }
     }
 }

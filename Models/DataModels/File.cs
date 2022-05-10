@@ -14,7 +14,7 @@ namespace elearning_platform.Models
         public Guid? UploadedByUid { get; set; }
 
         [ForeignKey("UploadedByUid")]
-        public User? UploadedBy { get; set; }
+        public virtual User? UploadedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

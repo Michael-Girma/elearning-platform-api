@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace elearning_platform.Models
+namespace elearning_platform.DTO
 {
-    public class PaymentDetail : BaseEntity
+    public class ReadPaymentDetailDTO
     {
-        [Key]
-        public Guid Id { get; set; }
-
         [Required]
         public float TotalAmount { get; set; }
 

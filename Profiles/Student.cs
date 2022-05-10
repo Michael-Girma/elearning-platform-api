@@ -1,7 +1,7 @@
 using AutoMapper;
+using Castle.DynamicProxy;
 using elearning_platform.DTO;
 using elearning_platform.Models;
-
 namespace elearning_platform.Profiles
 {
     public class StudentProfile : Profile
@@ -9,6 +9,7 @@ namespace elearning_platform.Profiles
         public StudentProfile()
         {
             CreateMap<StudentSignupDTO, Student>().ForMember(student => student.StudentId, opt => opt.Ignore());
+            CreateMap<Student, ReadStudentDTO>();
         }
     }
 }

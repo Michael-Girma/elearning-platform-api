@@ -9,6 +9,6 @@ namespace elearning_platform.Models
         [ForeignKey("SessionOrder")]
         public override Guid OrderId { get; set; }
 
-        public SessionOrder SessionOrder { get; set; }
+        public virtual SessionOrder SessionOrder { get; set; }
     }
 }

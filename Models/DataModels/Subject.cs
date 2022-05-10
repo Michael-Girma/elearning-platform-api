@@ -16,12 +16,12 @@ namespace elearning_platform.Models
 
         [ForeignKey("CreatedBy")]
 
-        public User CreatedByUser { get; set; }
+        public virtual User CreatedByUser { get; set; }
 
         [Required]
         [ForeignKey("EducationLevel")]
         public Guid EducationLevelId { get; set; }
 
-        public EducationLevel EducationLevel { get; set; }
+        public virtual EducationLevel EducationLevel { get; set; }
     }
 }

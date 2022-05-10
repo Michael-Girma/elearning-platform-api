@@ -8,6 +8,7 @@ namespace elearning_platform.Profiles
     {
         public PaymentLinkProfile()
         {
+            CreateMap<CreatePaymentLinkDTO, PaymentLink>();
             CreateMap<CreatePaymentLinkDTO, SessionPaymentLink>();
         }
     }

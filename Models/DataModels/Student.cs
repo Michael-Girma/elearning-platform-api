@@ -17,7 +17,7 @@ namespace elearning_platform.Models
         public Guid Uid { get; set; }
 
 
-        public User User { get; set; }
-        public EducationLevel EducationLevel { get; set; }
+        public virtual User User { get; set; }
+        public virtual EducationLevel EducationLevel { get; set; }
     }
 }
