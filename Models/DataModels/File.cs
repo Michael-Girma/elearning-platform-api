@@ -30,5 +30,7 @@ namespace elearning_platform.Models
 
         [Required]
         public string OriginalFileName { get; set; }
+
+        public virtual ICollection<ChatMessage> Messages { get; set; }
     }
 }

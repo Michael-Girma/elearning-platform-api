@@ -39,6 +39,13 @@ namespace elearning_platform.Data
         public DbSet<PaymentDetail> PaymentDetails { get; set; }
 
         public DbSet<PaymentAccountDetail> PaymentAccountDetails { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
+        
+        public DbSet<UserChat> UserChats { get; set; }
+        
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
         public override int SaveChanges()
         {
             OnBeforeSaving();
@@ -80,5 +87,10 @@ namespace elearning_platform.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
         .UseLazyLoadingProxies();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserChat>().HasKey(vf=> new {vf.UserId, vf.ChatId});
+        }
     }
 }

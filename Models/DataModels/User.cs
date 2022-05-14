@@ -30,5 +30,7 @@ namespace elearning_platform.Models
         public virtual ICollection<UserClaim> Claims { get; set; }
 
         public virtual PaymentAccountDetail? PaymentAccountDetail { get; set; }
+
+        public virtual ICollection<UserChat> Chats { get; set; }
     }
 }

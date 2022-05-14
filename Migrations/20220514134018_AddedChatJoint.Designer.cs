@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using elearning_platform.Data;
@@ -11,9 +12,10 @@ using elearning_platform.Data;
 namespace elearning_platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220514134018_AddedChatJoint")]
+    partial class AddedChatJoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +37,21 @@ namespace elearning_platform.Migrations
                     b.HasIndex("MessagesMessageId");
 
                     b.ToTable("ChatMessageInternalFileMetadata");
+                });
+
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.Property<Guid>("ChatsChatId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ParticipantsUid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ChatsChatId", "ParticipantsUid");
+
+                    b.HasIndex("ParticipantsUid");
+
+                    b.ToTable("UserChat", (string)null);
                 });
 
             modelBuilder.Entity("elearning_platform.Models.Admin", b =>
@@ -68,17 +85,12 @@ namespace elearning_platform.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("InitiatorUid")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ChatId");
 
-                    b.HasIndex("InitiatorUid");
-
-                    b.ToTable("Chats");
+                    b.ToTable("Chat");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.ChatMessage", b =>
@@ -108,7 +120,7 @@ namespace elearning_platform.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("ChatMessages");
+                    b.ToTable("ChatMessage");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.EducationLevel", b =>
@@ -636,27 +648,6 @@ namespace elearning_platform.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("elearning_platform.Models.UserChat", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "ChatId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("UserChats");
-                });
-
             modelBuilder.Entity("elearning_platform.Models.UserClaim", b =>
                 {
                     b.Property<Guid>("UserClaimId")
@@ -702,6 +693,21 @@ namespace elearning_platform.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Chat", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Admin", b =>
                 {
                     b.HasOne("elearning_platform.Models.User", "User")
@@ -711,17 +717,6 @@ namespace elearning_platform.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("elearning_platform.Models.Chat", b =>
-                {
-                    b.HasOne("elearning_platform.Models.User", "Initiator")
-                        .WithMany()
-                        .HasForeignKey("InitiatorUid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Initiator");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.ChatMessage", b =>
@@ -892,25 +887,6 @@ namespace elearning_platform.Migrations
                     b.Navigation("TaughtSubject");
                 });
 
-            modelBuilder.Entity("elearning_platform.Models.UserChat", b =>
-                {
-                    b.HasOne("elearning_platform.Models.Chat", "Chat")
-                        .WithMany("Participants")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("elearning_platform.Models.User", "User")
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("elearning_platform.Models.UserClaim", b =>
                 {
                     b.HasOne("elearning_platform.Models.User", "User")
@@ -925,8 +901,6 @@ namespace elearning_platform.Migrations
             modelBuilder.Entity("elearning_platform.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.OnlineSession", b =>
@@ -952,8 +926,6 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.User", b =>
                 {
-                    b.Navigation("Chats");
-
                     b.Navigation("Claims");
 
                     b.Navigation("PaymentAccountDetail");
