@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using elearning_platform.Repo;
 using elearning_platform.Services;
 using System.Text.Json.Serialization;
+using EFCoreSecondLevelCacheInterceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -56,9 +57,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
+var providerName1  = "EFCoreEntities";
+builder.Services.AddEFSecondLevelCache(options => 
+    options.UseEasyCachingCoreProvider(providerName1, isHybridCache: false).DisableLogging(true).UseCacheKeyPrefix("EF_")
+);
+
+builder.Services.AddEasyCaching(option =>
+{
+    option.UseRedis(config =>
+    {
+        config.DBConfig.AllowAdmin = true;
+        config.DBConfig.Endpoints.Add(new EasyCaching.Core.Configurations.ServerEndPoint("127.0.0.1", 6379));
+    }, providerName1);
+});
+
+
+builder.Services.AddMemoryCache();
+builder.Services.AddStackExchangeRedisCache(options => {
+    options.Configuration = "";
+});
+
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(smtpConfig);
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
+
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
@@ -82,7 +104,6 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITaughtSubjectService, TaughtSubjectService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
-
 
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

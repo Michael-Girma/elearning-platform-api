@@ -11,7 +11,6 @@ namespace elearning_platform.Services
         private readonly ITaughtSubjectRepo _taughtSubjectRepo;
         private readonly ITutorRepo _tutorRepo;
         private readonly IMapper _mapper;
-        private readonly ITutorRequestRepo _tutorRequestRepo;
 
         public TaughtSubjectService(AppDbContext ctx, ITaughtSubjectRepo taughtSubjectRepo, IMapper mapper, ITutorRepo tutorRepo)
         {

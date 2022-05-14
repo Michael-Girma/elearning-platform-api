@@ -4,7 +4,7 @@ namespace elearning_platform.Utils
 {
     public class DataUtils
     {
-        public static string ToMD5Hash(byte[] bytes)
+        public static string? ToMD5Hash(byte[] bytes)
         {
             if (bytes == null || bytes.Length == 0)
                 return null;

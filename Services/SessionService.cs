@@ -171,7 +171,8 @@ namespace elearning_platform.Services
                 throw new RequestUnauthorizedException("Supplied payment detail is not authentic");
             }
             var sessionOrder = _sessionRepo.GetSessionOrderById(Guid.Parse(iPNModel.MerchantOrderId));
-            if(sessionOrder == null){
+            if(sessionOrder == null)
+            {
                 throw new Exception();
             }
             _paymentRepo.SavePaymentDetail(iPNModel);

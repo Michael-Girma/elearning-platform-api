@@ -5,12 +5,7 @@ namespace elearning_platform.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options)
-        {
-            // this.ChangeTracker.LazyLoadingEnabled = true;
-            // this.ChangeTracker.
-            // base.C
-        }
+        public AppDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
 
