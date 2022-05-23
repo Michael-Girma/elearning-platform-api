@@ -11,15 +11,19 @@ namespace elearning_platform.Hubs
     [Authorize]
     public class ChatHub : Hub<IChatHub>
     {
-        public readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUserService;
 
         public ChatHub(ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;
         }
 
-        public async Task SendMessage(string user, ChatMessage message)
-            => await Clients.All.SendUpdate(user, message);
+        public async void SendMessage(string user, ChatMessage message)
+        {
+            // var message = 
+            throw new Exception("WOY");
+            await Clients.All.SendUpdate(user, message);
+        }
 
         public override Task OnConnectedAsync()
         {

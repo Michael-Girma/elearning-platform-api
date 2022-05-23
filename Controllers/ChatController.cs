@@ -21,8 +21,7 @@ namespace elearning_platform.Controllers
         public ActionResult SendMessage()
         {
             var message = new ChatMessage(){
-                // Content = "sup boii", 
-                Sender = "MEEEEEE"
+                SenderId = "MEEEEEE"
             };
             _hubContext.Clients.Groups("Yaay").SendUpdate("Yayyy", message);
             return Ok("Sent");

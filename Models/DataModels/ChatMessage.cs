@@ -10,7 +10,11 @@ namespace elearning_platform.Models
         public string Message { get; set; }
 
         public virtual IEnumerable<InternalFileMetadata> Attachments { get; set; }
-        public string Sender { get; set; }
+
+        [ForeignKey("User")]
+        public string SenderId { get; set; }
+
+        public virtual User Sender { get; set; }
 
         [ForeignKey("Chat")]
         public Guid ChatId { get; set; }
