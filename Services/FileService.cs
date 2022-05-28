@@ -4,6 +4,7 @@ using Dropbox.Api.Files;
 using elearning_platform.Models;
 using elearning_platform.Repo;
 using elearning_platform.Utils;
+using Microsoft.AspNetCore.Hosting;
 
 namespace elearning_platform.Services
 {
@@ -11,11 +12,13 @@ namespace elearning_platform.Services
     {
         private readonly DropboxClient _dbx;
         private readonly IFileRepo _fileRepo;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public FileService(IFileRepo fileRepo)
+        public FileService(IFileRepo fileRepo, IWebHostEnvironment environment)
         {
             _dbx = new DropboxClient(Environment.GetEnvironmentVariable("DROPBOX_ACCESS_TOKEN"));
             _fileRepo = fileRepo;
+            _hostingEnvironment = environment;
         }
 
         public Task<TemporaryFileRef> GetDownloadLink(InternalFileMetadata fileMetadata)
@@ -28,6 +31,25 @@ namespace elearning_platform.Services
                 ContentHash = fileMetadata.ContentHash
             };
             return Task.FromResult(tempRef);
+        }
+
+        public async Task<string> UploadStaticFile(IFormFile formFile)
+        {
+            using(var mem = new MemoryStream())
+            {
+                formFile.CopyTo(mem);
+                mem.Position = 0;
+                var fileBytes = mem.ToArray();
+                var fileName = $"{GetFileNameWithoutExt(formFile.FileName)}-{DataUtils.ToMD5Hash(fileBytes)}.{GetFileExtension(formFile.FileName)}";
+                // string uploadPath = Path.Combine(_hostingEnvironment.WebRootPath, "cdn");
+                string filePath = Path.Combine(_hostingEnvironment.WebRootPath, fileName);
+                formFile.CopyTo(new FileStream(filePath, FileMode.Create, FileAccess.Write));
+                return fileName;
+                // using (Stream fileStream = new FileStream(filePath, FileMode.Create)) {
+                //     await formFile.CopyToAsync(fileStream);
+                //     return fileName;
+                // }
+            }
         }
 
         public Task<InternalFileMetadata> UploadFile(IFormFile formFile)
@@ -90,6 +112,8 @@ namespace elearning_platform.Services
             var sections = fileName.Split('.').SkipLast(1);
             return string.Join('.', sections);
         }
+
+
     }
 
 

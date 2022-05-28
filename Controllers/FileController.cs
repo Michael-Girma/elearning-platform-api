@@ -40,5 +40,18 @@ namespace elearning_platform.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("upload_static")]
+        public async Task<ActionResult> UploadFileStatic()
+        {
+            var file = Request.Form?.Files?.FirstOrDefault();
+            if (file != null)
+            {
+                var metadata = await _fileService.UploadStaticFile(file);
+                return Ok(metadata);
+            }
+            return BadRequest();
+        }
     }
 }

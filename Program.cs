@@ -1,3 +1,4 @@
+using AutoWrapper;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +12,13 @@ using elearning_platform.Services;
 using System.Text.Json.Serialization;
 using elearning_platform.Hubs;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions(){
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    EnvironmentName = Environments.Staging,
+    WebRootPath = "customwwwroot"
+});
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var jwtConfig = new JWTConfig();
@@ -56,26 +63,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
     options.UseNpgsql(connectionString);
 });
-
-// var providerName1  = "EFCoreEntities";
-// builder.Services.AddEFSecondLevelCache(options => 
-//     options.UseEasyCachingCoreProvider(providerName1, isHybridCache: false).DisableLogging(true).UseCacheKeyPrefix("EF_")
-// );
-
-// builder.Services.AddEasyCaching(option =>
-// {
-//     option.UseRedis(config =>
-//     {
-//         config.DBConfig.AllowAdmin = true;
-//         config.DBConfig.Endpoints.Add(new EasyCaching.Core.Configurations.ServerEndPoint("127.0.0.1", 6379));
-//     }, providerName1);
-// });
-
-
-// builder.Services.AddMemoryCache();
-// builder.Services.AddStackExchangeRedisCache(options => {
-//     options.Configuration = "localhost:6379";
-// });
 
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(smtpConfig);
@@ -124,10 +111,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles(new StaticFileOptions(){
+    RequestPath = "/StaticFiles"
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCurrentUserService();
+// app.UseApiResponseAndExceptionWrapper();
 app.MapControllers();
 app.MapHub<ChatHub>("/notify");
 

@@ -1,7 +1,7 @@
 using elearning_platform.Data;
 using elearning_platform.Models;
 using System.Security.Cryptography;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace elearning_platform.Repo
 {
@@ -22,6 +22,11 @@ namespace elearning_platform.Repo
         public SessionOrder? GetSessionOrderById(Guid id)
         {
             return _ctx.SessionOrders.SingleOrDefault(e => e.SessionOrderId == id);
+        }
+
+        public IEnumerable<Session> GetSessionsForStudent(Guid id)
+        {
+            return _ctx.Sessions.Include(e => e.TutorRequest).Where(e => e.TutorRequest.StudentId == id);
         }
 
         public Session? UpdateSession(Session session)

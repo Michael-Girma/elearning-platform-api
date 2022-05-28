@@ -9,5 +9,7 @@ namespace elearning_platform.Repo
         SessionOrder? GetSessionOrderById(Guid id);
 
         Session? UpdateSession(Session session);
+
+        IEnumerable<Session> GetSessionsForStudent(Guid id);
     }
 }
