@@ -14,15 +14,21 @@ namespace elearning_platform.Services
         private readonly ITutorRequestRepo _tutorRequestRepo;
         private readonly ITaughtSubjectRepo _taughtSubjectRepo;
         private readonly IPaymentService _paymentService;
+        private readonly ITutorService _tutorService;
         private readonly IPaymentRepo _paymentRepo;
+        private readonly ITutorRepo _tutorRepo;
+        private readonly IStudentRepo _studentRepo;
         private readonly ISessionRepo _sessionRepo;
         private readonly IMapper _mapper;
 
-        public SessionService(ITutorRequestRepo tutorRequestRepo, IMapper mapper, ITaughtSubjectRepo taughtSubjectRepo, IPaymentRepo paymentRepo, IPaymentService paymentService, ISessionRepo sessionRepo)
+        public SessionService(ITutorRequestRepo tutorRequestRepo, ITutorRepo tutorRepo, IStudentRepo studentRepo, ITutorService tutorService, IMapper mapper, ITaughtSubjectRepo taughtSubjectRepo, IPaymentRepo paymentRepo, IPaymentService paymentService, ISessionRepo sessionRepo)
         {
             _tutorRequestRepo = tutorRequestRepo;
             _taughtSubjectRepo = taughtSubjectRepo;
             _paymentService = paymentService;
+            _tutorService = tutorService;
+            _tutorRepo = tutorRepo;
+            _studentRepo = studentRepo;
             _sessionRepo = sessionRepo;
             _paymentRepo = paymentRepo;
             _mapper = mapper;
@@ -181,6 +187,35 @@ namespace elearning_platform.Services
             session.BookingStatus = Session.BookingStatuses.Booked.ToString();
             _sessionRepo.UpdateSession(session);
             return session;
+        }
+
+        public async Task<ReadEnquiryInsightDTO?> GetEnquiryInsights(Guid tutorRequestId)
+        {
+            var tutorRequest = _tutorRequestRepo.GetTutorRequestById(tutorRequestId);
+            if(tutorRequest == null){
+                throw new BadRequestException("Enquiry doesn't exist");
+            }
+            var tutorDetails = _tutorService.GetTutorDetails(tutorRequest.TaughtSubject.TutorId);
+            return new ReadEnquiryInsightDTO(){
+                Id = tutorRequestId,
+                TaughtSubject = _mapper.Map<ReadTaughtSubjectDTO>(tutorRequest.TaughtSubject),
+                TutorSessionCount = tutorDetails.Sessions.Count(),
+                TutorTeachesOnline = tutorDetails.TeachesOnline,
+                Verified = tutorDetails.Verified
+            };
+        }
+
+        public async Task<IEnumerable<ReadEnquiryInsightDTO>> GetAllEnquiryInsights(Guid studentId)
+        {
+            var student = _studentRepo.GetStudentById(studentId);
+            var tutors = _tutorRepo.GetTutorsForStudent(studentId).ToList();
+            List<ReadEnquiryInsightDTO> myList=new List<ReadEnquiryInsightDTO>();
+            var requests = from tutor in tutors select student.TutorRequests.FirstOrDefault(e => e.TaughtSubject.TutorId == tutor.TutorId);
+            foreach(var request in requests.ToList())
+            {
+                myList.Add(await GetEnquiryInsights(request.TutorRequestId));
+            }
+            return myList;
         }
     }
 }

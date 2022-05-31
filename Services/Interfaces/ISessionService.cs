@@ -14,5 +14,7 @@ namespace elearning_platform.Services
         SessionPaymentLink GenerateLinkForBooking(Guid tutorRequestId, Student student, CreatePaymentLinkDTO paymentLinkDTO);
 
         Task<Session> BookSession(PaymentDetail ipn);
+
+        Task<IEnumerable<ReadEnquiryInsightDTO>> GetAllEnquiryInsights(Guid studentId);
     }
 }

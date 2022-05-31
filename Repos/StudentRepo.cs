@@ -16,7 +16,7 @@ namespace elearning_platform.Repo
 
         public Student? GetStudentById(Guid studentId, bool includeRelations = false)
         {
-            throw new NotImplementedException();
+            return _ctx.Students.FirstOrDefault(e => e.StudentId == studentId);
         }
 
         public Student? GetStudentByUid(Guid uid, bool includeRelations = false)

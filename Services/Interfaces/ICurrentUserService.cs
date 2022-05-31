@@ -8,6 +8,8 @@ namespace elearning_platform.Services
         Student? GetStudent();
         Tutor? GetTutor();
 
+        Admin? GetAdmin();
+
         bool isAdmin { get; }
 
         void SetUser(Guid uid);

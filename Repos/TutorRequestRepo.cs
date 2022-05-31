@@ -38,7 +38,7 @@ namespace elearning_platform.Repo
         public IEnumerable<TutorRequest> GetTutorRequestsForUser(Guid id)
         {
             var requests = _ctx.TutorRequests.Include(e => e.TaughtSubject).Include(e => e.Student).Include(e => e.Sessions);
-            return requests.Where(e => e.TaughtSubject.TutorId == id || e.Student.Uid == id);
+            return requests.Where(e => e.TaughtSubject.Tutor.Uid == id || e.Student.Uid == id);
         }
 
         public TutorRequest? UpdateRequest(TutorRequest request)

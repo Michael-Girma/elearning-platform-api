@@ -57,14 +57,14 @@ namespace elearning_platform.Controllers.Auth
 
         [HttpPost]
         [Route("student/login")]
-        public async Task<ActionResult<LoginStudentDTO>> LoginStudent(LoginDTO readUserDto)
+        public async Task<ActionResult<ReadLoginDTO>> LoginStudent(LoginDTO readUserDto)
         {
             try
             {
                 var auth = await _jwtRepo.Authenticate(readUserDto);
                 if (auth.Result == AuthResult.MfaCodeIssued)
                 {
-                    return Ok("Please check your email for MFA code");
+                    return Ok(new ReadLoginDTO(){ Message = "Check MFA"});
                 }
                 else
                 {
@@ -74,8 +74,9 @@ namespace elearning_platform.Controllers.Auth
                     {
                         return Forbid("UserData Not Found");
                     }
-                    var loginStudentDTO = new LoginStudentDTO { Student = student, Auth = token };
+                    var loginStudentDTO = new UserDetailsDTO { Student = student, Auth = token };
 
+                    HttpContext.Response.Headers.Add("X-Auth-Token", loginStudentDTO.Auth.Token);
                     return Ok(loginStudentDTO);
                 }
             }
@@ -92,7 +93,7 @@ namespace elearning_platform.Controllers.Auth
 
         [HttpPost]
         [Route("admin/login")]
-        public async Task<ActionResult<LoginAdminDTO>> LoginAdmin(LoginDTO readUserDto)
+        public async Task<ActionResult<ReadLoginDTO>> LoginAdmin(LoginDTO readUserDto)
         {
             try
             {
@@ -109,7 +110,7 @@ namespace elearning_platform.Controllers.Auth
                     {
                         return Forbid("UserData Not Found");
                     }
-                    var loginAdminDTO = new LoginAdminDTO { Admin = admin, Auth = token };
+                    var loginAdminDTO = new UserDetailsDTO { Admin = admin, Auth = token };
 
                     return Ok(loginAdminDTO);
                 }
@@ -156,7 +157,7 @@ namespace elearning_platform.Controllers.Auth
 
         [HttpPost]
         [Route("tutor/login")]
-        public async Task<ActionResult<LoginAdminDTO>> LoginTutor(LoginDTO readUserDto)
+        public async Task<ActionResult<ReadLoginDTO>> LoginTutor(LoginDTO readUserDto)
         {
             try
             {
@@ -173,7 +174,7 @@ namespace elearning_platform.Controllers.Auth
                     {
                         return Forbid("UserData Not Found");
                     }
-                    var loginDTO = new ReadLoginTutorDTO { Tutor = admin, Auth = token };
+                    var loginDTO = new UserDetailsDTO { Tutor = admin, Auth = token };
 
                     return Ok(loginDTO);
                 }
@@ -192,13 +193,18 @@ namespace elearning_platform.Controllers.Auth
 
 
         [HttpGet]
-        [Route("ping")]
-        public StudentSignupDTO Ping()
+        [Authorize]
+        [Route("token_test")]
+        public ReadLoginDTO tokenTest()
         {
-            return new StudentSignupDTO()
+            var userDetails = new UserDetailsDTO()
             {
-                DateOfBirth = DateTime.Now
+                Student = _currentUserService.GetStudent(),
+                Tutor = _currentUserService.GetTutor(),
+                Admin = _currentUserService.GetAdmin(),
+                User = _currentUserService.User!
             };
+            return _mapper.Map<ReadLoginDTO>(userDetails);
         }
 
         [HttpPost]

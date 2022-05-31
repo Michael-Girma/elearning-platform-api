@@ -29,6 +29,11 @@ namespace elearning_platform.Repo
             return _ctx.Sessions.Include(e => e.TutorRequest).Where(e => e.TutorRequest.StudentId == id);
         }
 
+        public IEnumerable<Session> GetSessionsForTutor(Guid id)
+        {
+            return _ctx.Sessions.Include(e => e.TutorRequest.TaughtSubject).Where(e => e.TutorRequest.TaughtSubject.TutorId == id);
+        }
+
         public Session? UpdateSession(Session session)
         {
             var entity = _ctx.Sessions.FirstOrDefault(e => e.SessionId == session.SessionId);

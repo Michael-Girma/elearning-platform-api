@@ -34,8 +34,8 @@ namespace elearning_platform.Controllers
         }
 
         [HttpPut]
-        [Authorize(Policy = Policies.StudentOnly)]
-        [Route("{tutorRequestId}/reply")]
+        [Authorize(Policy = Policies.TutorOnly)]
+        [Route("{tutorRequestId}/tutor/reply")]
         public ActionResult RespondToTutorRequest(Guid tutorRequestId, TutorUpdateTutorRequest updateTutorRequest)
         {
             var user = _currentUserService.User;

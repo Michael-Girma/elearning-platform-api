@@ -82,6 +82,7 @@ builder.Services.AddScoped<IPaymentLinkRepo, PaymentLinkRepo>();
 builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 builder.Services.AddScoped<ISessionRepo, SessionRepo>();
 
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -91,6 +92,10 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITaughtSubjectService, TaughtSubjectService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IStatService, StatService>();
+builder.Services.AddScoped<ITutorService, TutorService>();
+builder.Services.AddScoped<ITutorRequestService, TutorRequestService>();
+
 
 
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -111,14 +116,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(new StaticFileOptions(){
-    RequestPath = "/StaticFiles"
-});
+// app.UseStaticFiles(new StaticFileOptions(){
+//     RequestPath = "/StaticFiles"
+// });
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCurrentUserService();
-// app.UseApiResponseAndExceptionWrapper();
+app.UseApiResponseAndExceptionWrapper();
 app.MapControllers();
-app.MapHub<ChatHub>("/notify");
+// app.MapHub<ChatHub>("/notify");
 
 app.Run();

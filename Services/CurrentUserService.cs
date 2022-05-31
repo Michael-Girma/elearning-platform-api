@@ -30,6 +30,15 @@ namespace elearning_platform.Services
             return null;
         }
 
+        public Admin? GetAdmin()
+        {
+            if(User != null)
+            {
+                return _adminRepo.GetAdminByAdminId(User.Uid);
+            }
+            return null;
+        }
+
         public Tutor? GetTutor()
         {
             if (User != null)

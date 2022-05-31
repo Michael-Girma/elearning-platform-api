@@ -9,5 +9,7 @@ namespace elearning_platform.Repo
         Tutor? GetTutorByUid(Guid uid);
 
         Tutor CreateTutor(Tutor tutor);
+
+        IEnumerable<Tutor> GetTutorsForStudent(Guid id);
     }
 }

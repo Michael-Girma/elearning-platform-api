@@ -19,6 +19,7 @@ namespace elearning_platform.Controllers
         }
 
         [HttpGet]
+        [Route("student")]
         [Authorize(Policy=Policies.StudentOnly)]
         public ActionResult GetStudentActivity()
         {

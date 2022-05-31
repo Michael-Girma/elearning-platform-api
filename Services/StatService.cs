@@ -6,12 +6,12 @@ namespace elearning_platform.Services
 {
     public class StatService : IStatService
     {
-        private readonly StudentRepo _studentRepo;
-        private readonly TutorRequestRepo _tutorRequestRepo;
-        private readonly SessionRepo _sessionRepo;
+        private readonly IStudentRepo _studentRepo;
+        private readonly ITutorRequestRepo _tutorRequestRepo;
+        private readonly ISessionRepo _sessionRepo;
         private readonly IMapper _mapper;
 
-        public StatService(StudentRepo studentRepo, TutorRequestRepo tutorRequestRepo, SessionRepo sessionRepo, IMapper mapper)
+        public StatService(IStudentRepo studentRepo, ITutorRequestRepo tutorRequestRepo, ISessionRepo sessionRepo, IMapper mapper)
         {
             _studentRepo = studentRepo;
             _tutorRequestRepo = tutorRequestRepo;
@@ -21,7 +21,7 @@ namespace elearning_platform.Services
         public ReadStudentActivityDTO GetStudentActivity(Guid id)
         {
             var student = _studentRepo.GetStudentById(id);
-            var tutorRequests = _tutorRequestRepo.GetTutorRequestsForStudent(id);
+            var tutorRequests = _tutorRequestRepo.GetTutorRequestsForStudent(id).ToList();
             var sessions = _sessionRepo.GetSessionsForStudent(id).ToList();
             var activity = new ReadStudentActivityDTO(){
                 TutorRequests = _mapper.Map<List<ReadTutorRequestDTO>>(tutorRequests),

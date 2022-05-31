@@ -11,5 +11,6 @@ namespace elearning_platform.Repo
         Session? UpdateSession(Session session);
 
         IEnumerable<Session> GetSessionsForStudent(Guid id);
+        IEnumerable<Session> GetSessionsForTutor(Guid id);
     }
 }

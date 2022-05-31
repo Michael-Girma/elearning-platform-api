@@ -1,6 +1,6 @@
 using elearning_platform.Data;
 using elearning_platform.Models;
-
+using Microsoft.EntityFrameworkCore;
 namespace elearning_platform.Repo
 {
     public class TutorRepo : ITutorRepo
@@ -20,6 +20,11 @@ namespace elearning_platform.Repo
         public Tutor? GetTutorByUid(Guid uid)
         {
             return _ctx.Tutors.FirstOrDefault(tutor => tutor.Uid == uid);
+        }
+
+        public IEnumerable<Tutor> GetTutorsForStudent(Guid uid)
+        {
+            return _ctx.TutorRequests.Include(e => e.TaughtSubject.Tutor).Select(e => e.TaughtSubject.Tutor).Distinct();
         }
 
         public Tutor CreateTutor(Tutor tutor)

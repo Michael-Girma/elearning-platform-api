@@ -15,5 +15,7 @@ namespace elearning_platform.Models
         public Guid Uid { get; set; }
 
         public virtual User User { get; set; }
+
+        public virtual ICollection<TaughtSubject> TaughtSubjects { get; set; }
     }
 }

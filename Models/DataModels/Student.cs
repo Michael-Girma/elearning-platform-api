@@ -19,5 +19,7 @@ namespace elearning_platform.Models
 
         public virtual User User { get; set; }
         public virtual EducationLevel EducationLevel { get; set; }
+
+        public virtual IEnumerable<TutorRequest> TutorRequests { get; set; }
     }
 }

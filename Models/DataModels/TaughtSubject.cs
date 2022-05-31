@@ -27,5 +27,8 @@ namespace elearning_platform.Models
         public bool TaughtOnline { get; set; }
 
         public bool TaughtInPerson { get; set; }
+
+        public int PreferredSessionLength { get; set; }
+        public int PreferredSessionCount { get; set; }
     }
 }
