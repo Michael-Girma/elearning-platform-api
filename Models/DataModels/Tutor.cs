@@ -17,5 +17,7 @@ namespace elearning_platform.Models
         public virtual User User { get; set; }
 
         public virtual ICollection<TaughtSubject> TaughtSubjects { get; set; }
+
+        public virtual ICollection<SessionFeedback> Feedbacks { get; set; }
     }
 }

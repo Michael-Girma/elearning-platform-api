@@ -19,8 +19,11 @@ namespace elearning_platform.DTO
         public bool TaughtOnline { get; set; }
 
         public bool TaughtInPerson { get; set; }
+        public bool Approved { get; set; }
 
         public int PreferredSessionCount { get; set; }
         public int PreferredSessionLength { get; set; }
+
+        public virtual IEnumerable<ReadLessonDocumentDTO> LessonDocuments { get; set; }
     }
 }

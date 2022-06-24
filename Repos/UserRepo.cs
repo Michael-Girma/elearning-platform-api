@@ -24,11 +24,7 @@ namespace elearning_platform.Repo
             return user.SingleOrDefault(u => u.Uid == uid);
         }
 
-        public User? GetUserByUsername(string username, bool includeClaims = false)
-        {
-            var user = includeClaims ? _ctx.Users.Include(u => u.Claims) : _ctx.Users.AsQueryable();
-            return user.SingleOrDefault(u => u.Username == username);
-        }
+
 
         public IEnumerable<User> GetUsers()
         {
@@ -49,11 +45,24 @@ namespace elearning_platform.Repo
 
         public User CreateUser(User newUser)
         {
-            newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+            newUser.Password = HashPassword(newUser.Password);
             _ctx.Users.Add(newUser);
             return newUser;
         }
 
+        public User ResetPassword(ResetPasswordDTO resetDTO)
+        {
+            var passwordToken = _ctx.ResetPasswordTokens.FirstOrDefault(e => e.Token == resetDTO.Token);
+            passwordToken.Used = true;
+            passwordToken.User.Password = HashPassword(resetDTO.password);
+            _ctx.SaveChanges();
+            return passwordToken.User;
+        }
+
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
         public User? AuthUser(LoginDTO loginDTO)
         {
             var user = _ctx.Users.Include(e => e.Claims).FirstOrDefault(tempUser => tempUser.Email == loginDTO.Email);
@@ -62,6 +71,35 @@ namespace elearning_platform.Repo
                 return null;
             }
             return user;
+        }
+
+        public ResetPasswordToken GetResetPasswordToken(string token)
+        {
+            return _ctx.ResetPasswordTokens.FirstOrDefault(e => e.Token == token);
+        }
+
+        public ResetPasswordToken SaveResetToken(ResetPasswordToken token)
+        {
+            _ctx.ResetPasswordTokens.Add(token);
+            _ctx.SaveChanges();
+            return token;
+        }
+
+        public User SaveUser(User user)
+        {
+            var entity = _ctx.Users.FirstOrDefault(e => e.Uid == user.Uid);
+            if (entity == null)
+            {
+                return null;
+            }
+            _ctx.Entry(entity).CurrentValues.SetValues(user);
+            _ctx.SaveChanges();
+            return entity;   
+        }
+
+        public User? GetUserByUsername(string username, bool includeClaims = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

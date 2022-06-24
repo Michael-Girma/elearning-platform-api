@@ -10,6 +10,9 @@ namespace elearning_platform.Profiles
         {
             CreateMap<CreateSubjectDTO, Subject>();
             CreateMap<Subject, ReadSubjectDTO>();
+            CreateMap<StarredSubject, ReadStarredSubject>();
+            CreateMap<SubjectRequest, ReadSubjectRequestDTO>();
+            CreateMap<CreateSubjectRequestDTO, SubjectRequest>();
         }
     }
 }

@@ -8,9 +8,6 @@ namespace elearning_platform.DTO
         public Guid Uid { get; set; }
 
         [Required]
-        public string Username { get; set; }
-
-        [Required]
         public string FirstName { get; set; }
 
         [Required]
@@ -36,5 +33,8 @@ namespace elearning_platform.DTO
         [Required]
         [MinLength(8)]
         public string Password { get; set; }
+
+        public virtual CreatePaymentAccountDetailDTO? PaymentAccountDetail { get; set; }
+
     }
 }

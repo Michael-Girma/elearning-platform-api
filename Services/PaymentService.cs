@@ -10,11 +10,13 @@ namespace elearning_platform.Services
     {
         private readonly IPaymentLinkRepo _paymentLinkRepo;
         private readonly IMapper _mapper;
+        private readonly IPaymentRepo _paymentRepo;
 
-        public PaymentService(IPaymentLinkRepo paymentLinkRepo, IMapper mapper)
+        public PaymentService(IPaymentLinkRepo paymentLinkRepo, IPaymentRepo paymentRepo, IMapper mapper)
         {
             _paymentLinkRepo = paymentLinkRepo;
             _mapper = mapper;
+            _paymentRepo = paymentRepo;
         }
 
         public PaymentLink GeneratePaymentLink(PaymentLink paymentLink, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem)
@@ -35,6 +37,17 @@ namespace elearning_platform.Services
         {
             var ipn = _mapper.Map<IPNModel>(paymentDetail);
             return CheckoutHelper.IsIPNAuthentic(ipn);
+        }
+
+        public IEnumerable<ReadPaymentDetailDTO> GetAllPayments()
+        {
+            var payments = _paymentRepo.GetAllPaymentDetails().ToList();
+            var readPaymentDTOs = _mapper.Map<IEnumerable<ReadPaymentDetailDTO>>(payments);
+            foreach(var paymentDTO in readPaymentDTOs)
+            {
+                paymentDTO.Merchant = _mapper.Map<ReadUserDTO>(_paymentRepo.GetUserByMerchantCode(paymentDTO.MerchantCode));
+            }
+            return readPaymentDTOs;
         }
     }
 }

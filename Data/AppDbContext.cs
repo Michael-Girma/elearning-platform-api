@@ -43,8 +43,26 @@ namespace elearning_platform.Data
         public DbSet<Chat> Chats { get; set; }
         
         public DbSet<UserChat> UserChats { get; set; }
+
+        public DbSet<SessionFeedback> SessionFeedbacks { get; set; }
+
+        public DbSet<StarredSubject> StarredSubjects { get; set; }
         
         public DbSet<ChatMessage> ChatMessages { get; set; }
+
+        public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<Assessment> Assessments { get; set; }
+
+        public DbSet<AssessmentQuestion> AssessmentQuestions { get; set; }
+
+        public DbSet<QuestionChoice> QuestionChoices { get; set; }
+
+        public DbSet<Login> Logins { get; set; }
+
+        public DbSet<SubjectRequest> SubjectRequests { get; set; }
+        public DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+        public DbSet<LessonDocument> LessonDocuments { get; set; }
 
         public override int SaveChanges()
         {
@@ -91,6 +109,7 @@ namespace elearning_platform.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserChat>().HasKey(vf=> new {vf.UserId, vf.ChatId});
+            modelBuilder.Entity<StarredSubject>().HasKey(vf=> new {vf.UserId, vf.SubjectId});
         }
     }
 }

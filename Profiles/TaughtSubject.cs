@@ -9,7 +9,10 @@ namespace elearning_platform.Profiles
         public TaughtSubjectProfile()
         {
             CreateMap<CreateTaughtSubjectDTO, TaughtSubject>();
-            CreateMap<TaughtSubject, ReadTaughtSubjectDTO>();
+            CreateMap<TaughtSubject, ReadTaughtSubjectDTO>().MaxDepth(3);
+            CreateMap<UpdateTaughtSubjectDTO, TaughtSubject>();
+            CreateMap<CreateLessonDocumentDTO, LessonDocument>();
+            CreateMap<LessonDocument, ReadLessonDocumentDTO>();
         }
     }
 }

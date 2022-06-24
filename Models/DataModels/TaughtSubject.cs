@@ -24,11 +24,17 @@ namespace elearning_platform.Models
 
         public float PricePerHour { get; set; }
 
+        public bool Approved { get; set; }
+
         public bool TaughtOnline { get; set; }
 
         public bool TaughtInPerson { get; set; }
 
         public int PreferredSessionLength { get; set; }
         public int PreferredSessionCount { get; set; }
+
+        public bool Deleted { get; set; }
+
+        public virtual IEnumerable<LessonDocument> LessonDocuments { get; set; }
     }
 }

@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>elearning_platform</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoWrapper.Core" Version="4.5.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -23,4 +26,13 @@
     <PackageReference Include="YenePay.YenePaySDK" Version="1.5.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.2" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="PrefixedHierarchical" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

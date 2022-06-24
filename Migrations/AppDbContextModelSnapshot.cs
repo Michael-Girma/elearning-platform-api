@@ -59,6 +59,61 @@ namespace elearning_platform.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.Assessment", b =>
+                {
+                    b.Property<Guid>("AssessmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AssessmentName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("LastScore")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("AssessmentId");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("Assessments");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.AssessmentQuestion", b =>
+                {
+                    b.Property<Guid>("QuestionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AssessmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("QuestionContent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("QuestionId");
+
+                    b.HasIndex("AssessmentId");
+
+                    b.ToTable("AssessmentQuestions");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Chat", b =>
                 {
                     b.Property<Guid>("ChatId")
@@ -97,11 +152,10 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("SeenByParticipant")
+                        .HasColumnType("boolean");
 
-                    b.Property<Guid>("SenderUid")
+                    b.Property<Guid>("SenderId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedOn")
@@ -111,7 +165,7 @@ namespace elearning_platform.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.HasIndex("SenderUid");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("ChatMessages");
                 });
@@ -184,6 +238,53 @@ namespace elearning_platform.Migrations
                     b.HasIndex("UploadedByUid");
 
                     b.ToTable("InternalFiles");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.LessonDocument", b =>
+                {
+                    b.Property<Guid>("DocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("InternalFileMetadataId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TaughtSubjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("DocumentId");
+
+                    b.HasIndex("InternalFileMetadataId");
+
+                    b.HasIndex("TaughtSubjectId");
+
+                    b.ToTable("LessonDocuments");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.Login", b =>
+                {
+                    b.Property<Guid>("LoginId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("LoginId");
+
+                    b.ToTable("Logins");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.Mfa", b =>
@@ -321,6 +422,104 @@ namespace elearning_platform.Migrations
                     b.ToTable("PaymentDetails");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.QuestionChoice", b =>
+                {
+                    b.Property<Guid>("QuestionChoiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AssessmentQuestionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsCorrectAnswer")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("QuestionChoiceId");
+
+                    b.HasIndex("AssessmentQuestionId");
+
+                    b.ToTable("QuestionChoices");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.ResetPasswordToken", b =>
+                {
+                    b.Property<Guid>("ResetPasswordTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ResetPasswordTokenId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ResetPasswordTokens");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.Resource", b =>
+                {
+                    b.Property<Guid>("ResourceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecommendationLevel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ResourceId");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Session", b =>
                 {
                     b.Property<Guid>("SessionId")
@@ -337,6 +536,15 @@ namespace elearning_platform.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Recommendations")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SessionLength")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StudentNotes")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("TutorRequestId")
                         .HasColumnType("uuid");
 
@@ -348,6 +556,52 @@ namespace elearning_platform.Migrations
                     b.HasIndex("TutorRequestId");
 
                     b.ToTable("Sessions");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.SessionFeedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Report")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("ReportAddressed")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Stars")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TutorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId")
+                        .IsUnique();
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("SessionFeedbacks");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.SessionOrder", b =>
@@ -423,6 +677,27 @@ namespace elearning_platform.Migrations
                     b.ToTable("SessionPaymentLinks");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.StarredSubject", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("StarredSubjects");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Student", b =>
                 {
                     b.Property<Guid>("StudentId")
@@ -432,10 +707,7 @@ namespace elearning_platform.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("EducationLevelId")
+                    b.Property<Guid?>("EducationLevelId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("Uid")
@@ -472,6 +744,10 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ThumbnailPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
@@ -484,14 +760,61 @@ namespace elearning_platform.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.SubjectRequest", b =>
+                {
+                    b.Property<Guid>("SubjectRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Addressed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EducationLevelId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RequestAuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("SubjectRequestId");
+
+                    b.HasIndex("EducationLevelId");
+
+                    b.HasIndex("RequestAuthorId");
+
+                    b.ToTable("SubjectRequests");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.TaughtSubject", b =>
                 {
                     b.Property<Guid>("TaughtSubjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Approved")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("PreferredSessionCount")
                         .HasColumnType("integer");
@@ -627,6 +950,9 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -635,12 +961,11 @@ namespace elearning_platform.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Uid");
 
@@ -724,6 +1049,26 @@ namespace elearning_platform.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.Assessment", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Session", null)
+                        .WithMany("Assessments")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.AssessmentQuestion", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Assessment", "Assessment")
+                        .WithMany("AssessmentQuestions")
+                        .HasForeignKey("AssessmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assessment");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Chat", b =>
                 {
                     b.HasOne("elearning_platform.Models.User", "Initiator")
@@ -745,7 +1090,7 @@ namespace elearning_platform.Migrations
 
                     b.HasOne("elearning_platform.Models.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderUid")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -761,6 +1106,25 @@ namespace elearning_platform.Migrations
                         .HasForeignKey("UploadedByUid");
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.LessonDocument", b =>
+                {
+                    b.HasOne("elearning_platform.Models.InternalFileMetadata", "InternalFileMetadata")
+                        .WithMany()
+                        .HasForeignKey("InternalFileMetadataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.TaughtSubject", "TaughtSubject")
+                        .WithMany("LessonDocuments")
+                        .HasForeignKey("TaughtSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InternalFileMetadata");
+
+                    b.Navigation("TaughtSubject");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.OnlineSession", b =>
@@ -785,6 +1149,37 @@ namespace elearning_platform.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.QuestionChoice", b =>
+                {
+                    b.HasOne("elearning_platform.Models.AssessmentQuestion", "AssessmentQuestion")
+                        .WithMany("Choices")
+                        .HasForeignKey("AssessmentQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssessmentQuestion");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.ResetPasswordToken", b =>
+                {
+                    b.HasOne("elearning_platform.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.Resource", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Session", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Session", b =>
                 {
                     b.HasOne("elearning_platform.Models.TutorRequest", "TutorRequest")
@@ -794,6 +1189,33 @@ namespace elearning_platform.Migrations
                         .IsRequired();
 
                     b.Navigation("TutorRequest");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.SessionFeedback", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Session", "Session")
+                        .WithOne("SessionFeedback")
+                        .HasForeignKey("elearning_platform.Models.SessionFeedback", "SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.Student", "Student")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.Tutor", "Tutor")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Session");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Tutor");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.SessionOrder", b =>
@@ -824,13 +1246,30 @@ namespace elearning_platform.Migrations
                     b.Navigation("SessionOrder");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.StarredSubject", b =>
+                {
+                    b.HasOne("elearning_platform.Models.Subject", "Subject")
+                        .WithMany("StarredSubjects")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Student", b =>
                 {
                     b.HasOne("elearning_platform.Models.EducationLevel", "EducationLevel")
                         .WithMany()
-                        .HasForeignKey("EducationLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EducationLevelId");
 
                     b.HasOne("elearning_platform.Models.User", "User")
                         .WithMany()
@@ -862,10 +1301,29 @@ namespace elearning_platform.Migrations
                     b.Navigation("EducationLevel");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.SubjectRequest", b =>
+                {
+                    b.HasOne("elearning_platform.Models.EducationLevel", "EducationLevel")
+                        .WithMany()
+                        .HasForeignKey("EducationLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("elearning_platform.Models.Tutor", "Tutor")
+                        .WithMany()
+                        .HasForeignKey("RequestAuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EducationLevel");
+
+                    b.Navigation("Tutor");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.TaughtSubject", b =>
                 {
                     b.HasOne("elearning_platform.Models.Subject", "Subject")
-                        .WithMany()
+                        .WithMany("TaughtSubjects")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -941,6 +1399,16 @@ namespace elearning_platform.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("elearning_platform.Models.Assessment", b =>
+                {
+                    b.Navigation("AssessmentQuestions");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.AssessmentQuestion", b =>
+                {
+                    b.Navigation("Choices");
+                });
+
             modelBuilder.Entity("elearning_platform.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -956,7 +1424,14 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.Session", b =>
                 {
+                    b.Navigation("Assessments");
+
                     b.Navigation("OnlineSession");
+
+                    b.Navigation("Resources");
+
+                    b.Navigation("SessionFeedback")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("elearning_platform.Models.SessionOrder", b =>
@@ -966,11 +1441,27 @@ namespace elearning_platform.Migrations
 
             modelBuilder.Entity("elearning_platform.Models.Student", b =>
                 {
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("TutorRequests");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.Subject", b =>
+                {
+                    b.Navigation("StarredSubjects");
+
+                    b.Navigation("TaughtSubjects");
+                });
+
+            modelBuilder.Entity("elearning_platform.Models.TaughtSubject", b =>
+                {
+                    b.Navigation("LessonDocuments");
                 });
 
             modelBuilder.Entity("elearning_platform.Models.Tutor", b =>
                 {
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("TaughtSubjects");
                 });
 

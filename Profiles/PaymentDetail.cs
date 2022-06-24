@@ -10,7 +10,10 @@ namespace elearning_platform.Profiles
         public PaymentDetailProfile()
         {
             CreateMap<PaymentDetail, IPNModel>();
+            CreateMap<PaymentDetail, ReadPaymentDetailDTO>();
             CreateMap<ReadPaymentDetailDTO, PaymentDetail>();
+            CreateMap<CreatePaymentAccountDetailDTO, PaymentAccountDetail> ();
+            CreateMap<PaymentAccountDetail, ReadPaymentAccountDetailDTO>();
         }
     }
 }

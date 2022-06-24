@@ -10,6 +10,7 @@ namespace elearning_platform.Repo
         IEnumerable<User> GetUsers();
 
         bool DeleteUser(User user);
+        // bool DeletePaymentDetails(User user);
 
         User? GetUserByEmail(string emailAddress);
 
@@ -18,5 +19,13 @@ namespace elearning_platform.Repo
         bool SaveChanges();
         User CreateUser(User newUser);
 
+        ResetPasswordToken GetResetPasswordToken(string token);
+        User ResetPassword(ResetPasswordDTO resetDTO);
+
+        ResetPasswordToken SaveResetToken(ResetPasswordToken token);
+
+        User SaveUser(User user);
+
+        string HashPassword(string password);
     }
 }

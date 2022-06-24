@@ -12,7 +12,8 @@ namespace elearning_platform.Profiles
             
             CreateMap<UpdateTutorRequestDTO, TutorRequest>();
             CreateMap<TutorRequest, ReadTutorRequestDTO>()
-            .AfterMap((src, dest) => dest.TaughtSubject.Tutor = null);
+            .MaxDepth(1);
+            
 
         }
     }

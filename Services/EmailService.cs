@@ -12,13 +12,13 @@ namespace elearning_platform.Services
             _smtpConfig = smtpConfig;
         }
 
-        public bool SendEmail(string email, string body, string subject)
+        public bool SendEmail(string email, string body, string subject, bool isBodyHtml = false)
         {
             MailMessage message = new MailMessage();
             message.From = new MailAddress(_smtpConfig.EmailFromAddress);
             message.Body = body;
             message.To.Add(email);
-            message.IsBodyHtml = false;
+            message.IsBodyHtml = isBodyHtml;
             message.Subject = subject;
             var client = _smtpConfig.getClientForConfig();
             try

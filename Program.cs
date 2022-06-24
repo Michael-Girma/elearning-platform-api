@@ -47,6 +47,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 //Authentication
 builder.Services.AddAuthorization(options => PolicyManager.SetAuthorizationPolicies(options));
@@ -66,8 +67,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(smtpConfig);
-builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAdminRepo, AdminRepo>();
@@ -81,9 +83,11 @@ builder.Services.AddScoped<ITutorRequestRepo, TutorRequestRepo>();
 builder.Services.AddScoped<IPaymentLinkRepo, PaymentLinkRepo>();
 builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 builder.Services.AddScoped<ISessionRepo, SessionRepo>();
-
+builder.Services.AddScoped<IChatRepo, ChatRepo>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IFileService, FileService>();
@@ -97,15 +101,29 @@ builder.Services.AddScoped<ITutorService, TutorService>();
 builder.Services.AddScoped<ITutorRequestService, TutorRequestService>();
 
 
+builder.Services.AddControllers().AddJsonOptions(x => {
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder
+                          .AllowAnyOrigin()
+                          .AllowAnyHeader();
+                      });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR();
-
+builder.Services.AddSignalR().AddJsonProtocol(
+    options => {
+        options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    }
+);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -115,15 +133,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 // app.UseStaticFiles(new StaticFileOptions(){
 //     RequestPath = "/StaticFiles"
 // });
+app.UseCors(MyAllowSpecificOrigins);
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCurrentUserService();
-app.UseApiResponseAndExceptionWrapper();
+app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions(){BypassHTMLValidation = true, IsDebug = true});
 app.MapControllers();
-// app.MapHub<ChatHub>("/notify");
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

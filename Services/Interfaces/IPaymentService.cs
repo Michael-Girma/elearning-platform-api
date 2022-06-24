@@ -10,5 +10,7 @@ namespace elearning_platform.Services
         SessionPaymentLink GenerateSessionPaymentLink(SessionPaymentLink paymentLinkDTO, CheckoutOptions checkoutOptions, CheckoutItem checkoutItem);
 
         Task<bool> VerifyPaymentDetail(PaymentDetail paymentDetail);
+        IEnumerable<ReadPaymentDetailDTO> GetAllPayments();
+
     }
 }

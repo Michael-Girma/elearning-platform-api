@@ -9,5 +9,7 @@ namespace elearning_platform.DTO
 
         [Required]
         public Guid EducationLevelId { get; set; }
+
+        public string ThumbnailPath { get; set; }
     }
 }

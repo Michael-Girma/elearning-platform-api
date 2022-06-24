@@ -8,18 +8,18 @@ namespace elearning_platform.Models
         [Key]
         public Guid StudentId { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
-
         [ForeignKey("EducationLevel")]
-        public Guid EducationLevelId { get; set; }
+        public Guid? EducationLevelId { get; set; }
 
         [ForeignKey("User")]
         public Guid Uid { get; set; }
 
 
         public virtual User User { get; set; }
-        public virtual EducationLevel EducationLevel { get; set; }
+        public virtual EducationLevel? EducationLevel { get; set; }
 
         public virtual IEnumerable<TutorRequest> TutorRequests { get; set; }
+
+        public virtual IEnumerable<SessionFeedback> Feedbacks { get; set; }
     }
 }

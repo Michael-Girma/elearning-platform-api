@@ -31,6 +31,13 @@ namespace elearning_platform.Repo
             return _ctx.ChatMessages.Where(e => e.ChatId == id);
         }
 
+        public Chat SaveChat(Chat chat)
+        {
+            _ctx.Chats.Add(chat);
+            _ctx.SaveChanges();
+            return chat;
+        }
+
         public ChatMessage SaveChatMessage(ChatMessage message)
         {
             _ctx.ChatMessages.Add(message);

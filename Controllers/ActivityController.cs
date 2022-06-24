@@ -7,15 +7,17 @@ namespace elearning_platform.Controllers
 {
     [ApiController]
     [Route("activity")]
-    public class ActivityController: ControllerBase
+    public class ActivityController : ControllerBase
     {
         private readonly IStatService _statService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IPaymentService _paymentService;
 
-        public ActivityController(IStatService statService, ICurrentUserService currentUserService)
+        public ActivityController(IPaymentService paymentService, IStatService statService, ICurrentUserService currentUserService)
         {
             _statService = statService;
             _currentUserService = currentUserService;
+            _paymentService = paymentService;
         }
 
         [HttpGet]
@@ -26,6 +28,31 @@ namespace elearning_platform.Controllers
             var student = _currentUserService.GetStudent();
 
             return Ok(_statService.GetStudentActivity(student.StudentId));
-        } 
+        }
+
+        [HttpGet]
+        [Route("tutor")]
+        [Authorize(Policy=Policies.TutorOnly)]
+        public ActionResult GetTutorActivity()
+        {
+            var tutor = _currentUserService.GetTutor();
+            return Ok(_statService.GetTutorActivity(tutor.TutorId));
+        }
+
+        [HttpGet]
+        [Route("platform")]
+        [Authorize(Policy=Policies.AdminOnly)]
+        public ActionResult GetPlatformOverview()
+        {
+            return Ok(_statService.GetPlatformOverview());
+        }
+
+        [HttpGet]
+        [Route("payments")]
+        [Authorize(Policy=Policies.AdminOnly)]
+        public ActionResult GetPayments()
+        {
+            return Ok(_paymentService.GetAllPayments());
+        }
     }
 }

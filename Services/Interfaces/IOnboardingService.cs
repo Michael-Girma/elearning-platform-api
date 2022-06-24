@@ -6,6 +6,10 @@ namespace elearning_platform.Services
     public interface IOnboardingService
     {
         User SignupUser(SignupDTO signupDTO);
-        Tutor SignupTutor(SignupDTO signupDTO);
+        User setUserBan(Guid userId, bool banned);
+        Tutor SignupTutor(TutorSignupDTO signupDTO);
+        Student SignupStudent(StudentSignupDTO signupDTO);
+        IEnumerable<User> GetAllUsers();
+        User UpdateUserDetails(Guid userId, UpdateUserDetailsDTO user);
     }
 }

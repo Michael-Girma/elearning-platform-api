@@ -1,3 +1,5 @@
+using elearning_platform.Models;
+
 namespace elearning_platform.DTO
 {
     public class ReadOnlineSessionDTO
@@ -9,6 +11,9 @@ namespace elearning_platform.DTO
         public Guid SessionId { get; set; }
 
         public ReadSessionDTO Session { get; set; }
+
+        public ReadSessionOrderDTO SessionOrder { get; set; }
+
 
         public string VideoChatLink { get; set; }
     }

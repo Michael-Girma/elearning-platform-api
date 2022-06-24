@@ -14,6 +14,16 @@ namespace elearning_platform.Repo
             _ctx = ctx;
         }
 
+        public IEnumerable<PaymentDetail> GetAllPaymentDetails()
+        {
+            return _ctx.PaymentDetails.ToList();
+        }
+
+        public User? GetUserByMerchantCode(string merchantCode)
+        {
+            return _ctx.Users.FirstOrDefault(e => e.PaymentAccountDetail != null && e.PaymentAccountDetail.YenePaySellerCode == merchantCode);
+        }
+
         public PaymentDetail SavePaymentDetail(PaymentDetail paymentDetail)
         {
             var entity = _ctx.PaymentDetails.SingleOrDefault(e => e.TransactionCode == paymentDetail.TransactionCode);

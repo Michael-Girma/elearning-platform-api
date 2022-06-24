@@ -100,7 +100,7 @@ namespace elearning_platform.Controllers.Auth
                 var auth = await _jwtRepo.Authenticate(readUserDto);
                 if (auth.Result == AuthResult.MfaCodeIssued)
                 {
-                    return Ok("Please check your email for MFA code");
+                    return Ok(new ReadLoginDTO(){ Message = "Check MFA"});
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace elearning_platform.Controllers.Auth
 
         [HttpPost]
         [Route("tutor/signup")]
-        public ActionResult OnboardTutor(SignupDTO signupDTO)
+        public ActionResult OnboardTutor(TutorSignupDTO signupDTO)
         {
             try
             {
@@ -164,7 +164,8 @@ namespace elearning_platform.Controllers.Auth
                 var auth = await _jwtRepo.Authenticate(readUserDto);
                 if (auth.Result == AuthResult.MfaCodeIssued)
                 {
-                    return Ok("Please check your email for MFA code");
+                    return Ok(new ReadLoginDTO(){ Message = "Check MFA"});
+
                 }
                 else
                 {
@@ -190,8 +191,6 @@ namespace elearning_platform.Controllers.Auth
             }
         }
 
-
-
         [HttpGet]
         [Authorize]
         [Route("token_test")]
@@ -215,6 +214,36 @@ namespace elearning_platform.Controllers.Auth
             {
                 var userModel = _onboardingService.SignupUser(signupDTO);
                 return Ok(userModel);
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Route("forgot_password")]
+        public async Task<ActionResult> RequestResetLink(RequestResetDTO resetDTO)
+        {
+            try
+            {
+                var userModel = await _authService.RequestReset(resetDTO.Email);
+                return Ok();
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost]
+        [Route("reset_password")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordDTO resetDTO)
+        {
+            try
+            {
+                var userModel = await _authService.ResetPassword(resetDTO);
+                return Ok();
             }
             catch (BadRequestException e)
             {

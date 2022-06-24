@@ -10,5 +10,6 @@ namespace elearning_platform.Repo
         IEnumerable<ChatMessage> GetMessagesForChat(Guid id);
 
         ChatMessage SaveChatMessage(ChatMessage message);
+        Chat SaveChat(Chat chat);
     }
 }

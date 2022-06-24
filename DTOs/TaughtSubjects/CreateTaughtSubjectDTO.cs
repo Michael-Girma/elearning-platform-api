@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using elearning_platform.Models;
 
 namespace elearning_platform.DTO
 {
@@ -19,5 +20,13 @@ namespace elearning_platform.DTO
 
         [Required]
         public bool TaughtInPerson { get; set; }
+
+        [Required]
+        public int PreferredSessionCount { get; set; }
+
+        [Required]
+        public int PreferredSessionLength { get; set;}
+
+        public IEnumerable<CreateLessonDocumentDTO>? LessonDocuments { get; set; }
     }
 }

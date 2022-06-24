@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace elearning_platform.DTO
 {
-    public class ReadPaymentDetailDTO
+    public class ReadPaymentDetailDTO : BaseEntityDTO
     {
         [Required]
         public float TotalAmount { get; set; }
@@ -15,6 +15,8 @@ namespace elearning_platform.DTO
 
         [Required]
         public string MerchantCode { get; set; }
+
+        public virtual ReadUserDTO? Merchant { get; set; }
 
         [Required]
         public string TransactionId { get; set; }

@@ -14,6 +14,8 @@ namespace elearning_platform.Models
         [Required]
         public Guid CreatedBy { get; set; }
 
+        public string ThumbnailPath { get; set; }
+
         [ForeignKey("CreatedBy")]
 
         public virtual User CreatedByUser { get; set; }
@@ -23,5 +25,9 @@ namespace elearning_platform.Models
         public Guid EducationLevelId { get; set; }
 
         public virtual EducationLevel EducationLevel { get; set; }
+
+        public virtual IEnumerable<TaughtSubject> TaughtSubjects { get; set; }
+
+        public virtual IEnumerable<StarredSubject> StarredSubjects { get; set; }
     }
 }

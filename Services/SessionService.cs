@@ -91,6 +91,7 @@ namespace elearning_platform.Services
                 {
                     TutorRequestId = tutorRequest.TutorRequestId,
                     BookedTime = date,
+                    SessionLength = tutorRequest.SessionLength,
                     BookingStatus = Session.BookingStatuses.AwaitingInitialPayment.ToString(),
                 };
                 if (tutorRequest.OnlineSession)
@@ -126,12 +127,13 @@ namespace elearning_platform.Services
             {
                 throw new BadRequestException("Sessions have already been booked");
             }
-            var checkoutOptions = GetSessionCheckoutOptions(sortedSessions.First(), paymentLinkDTO);
-            var checkoutItem = GetSessionCheckoutItem(sortedSessions.First());
-            var paymentLink = _mapper.Map<SessionPaymentLink>(paymentLinkDTO);
-            paymentLink.OrderId = firstSession.OnlineSession.SessionOrder.SessionOrderId;
-            paymentLink = _paymentService.GenerateSessionPaymentLink(paymentLink, checkoutOptions, checkoutItem);
-            return paymentLink;
+            // var checkoutOptions = GetSessionCheckoutOptions(sortedSessions.First(), paymentLinkDTO);
+            // var checkoutItem = GetSessionCheckoutItem(sortedSessions.First());
+            // var paymentLink = _mapper.Map<SessionPaymentLink>(paymentLinkDTO);
+            // paymentLink.OrderId = firstSession.OnlineSession.SessionOrder.SessionOrderId;
+            // paymentLink = _paymentService.GenerateSessionPaymentLink(paymentLink, checkoutOptions, checkoutItem);
+            // return paymentLink;
+            return GenerateLinkForSession(firstSession.SessionId, student, paymentLinkDTO);
         }
 
         public CheckoutOptions GetSessionCheckoutOptions(Session session, CreatePaymentLinkDTO paymentLinkDTO)
@@ -145,6 +147,7 @@ namespace elearning_platform.Services
             {
                 CancelReturn = paymentLinkDTO.OnCancelReturn,
                 SuccessReturn = paymentLinkDTO.OnSuccessReturn,
+                IpnUrlReturn = paymentLinkDTO.OnSuccessReturn,
                 ExpiresAfter = 300000,
                 OrderId = session.OnlineSession.SessionOrder.SessionOrderId.ToString(),
                 SellerCode = userToBePaid.PaymentAccountDetail.YenePaySellerCode,
@@ -169,6 +172,7 @@ namespace elearning_platform.Services
             return checkoutItem;
         }
 
+
         public async Task<Session> BookSession(PaymentDetail iPNModel)
         {
             var isAuthenticIPN = await _paymentService.VerifyPaymentDetail(iPNModel);
@@ -183,6 +187,7 @@ namespace elearning_platform.Services
             }
             _paymentRepo.SavePaymentDetail(iPNModel);
             var session = sessionOrder.OnlineSession.Session;
+            session.OnlineSession.VideoChatLink = GenerateVideoChatLink(session.SessionId);
             session.OnlineSession.SessionOrder.OrderStatus = SessionOrder.OrderStatuses.Paid.ToString();
             session.BookingStatus = Session.BookingStatuses.Booked.ToString();
             _sessionRepo.UpdateSession(session);
@@ -216,6 +221,148 @@ namespace elearning_platform.Services
                 myList.Add(await GetEnquiryInsights(request.TutorRequestId));
             }
             return myList;
+        }
+
+        public IEnumerable<Session> GetAllSessionsForUser(Guid id)
+        {
+            var sessions = _sessionRepo.GetSessionsForUser(id);
+            foreach(var session in sessions)
+            {
+                var tutor  = session.TutorRequest.TaughtSubject.Tutor;
+
+            }
+            var sessionList = sessions.ToList();
+            return sessionList;
+        }
+
+        public SessionPaymentLink GenerateLinkForSession(Guid sessionId, Student student, CreatePaymentLinkDTO paymentLinkDTO)
+        {
+            var session = _sessionRepo.GetSessionById(sessionId);
+            if(session == null)
+            {
+                throw new BadRequestException("Session doesn't exist");
+            }
+            var checkoutOptions = GetSessionCheckoutOptions(session, paymentLinkDTO);
+            var checkoutItem = GetSessionCheckoutItem(session);
+            var paymentLink = _mapper.Map<SessionPaymentLink>(paymentLinkDTO);
+            paymentLink.OrderId = session.OnlineSession.SessionOrder.SessionOrderId;
+            paymentLink = _paymentService.GenerateSessionPaymentLink(paymentLink, checkoutOptions, checkoutItem);
+            return paymentLink;
+        }
+
+        public string GenerateVideoChatLink(Guid sessionId)
+        {
+            return "/etutorapp/" + Guid.NewGuid().ToString();
+        }
+
+        public SessionFeedback LeaveFeedback(Student student, Guid sessionId, CreateSessionFeedbackDTO feedbackDTO)
+        {
+            var session = _sessionRepo.GetSessionsForStudent(student.StudentId).FirstOrDefault(session => session.SessionId == sessionId);
+            if(session == null || session.BookedTime > DateTime.Now)
+            {
+                throw new BadRequestException("Student has not participated in this session");
+            }
+            var feedback = _mapper.Map<SessionFeedback>(feedbackDTO);
+            feedback.SessionId = session.SessionId;
+            feedback.StudentId = student.StudentId;
+            feedback.TutorId = session.TutorRequest.TaughtSubject.TutorId;
+            _sessionRepo.SaveFeedback(feedback);
+            return feedback;
+        }
+
+        public IEnumerable<SessionFeedback> GetFeedbacksOfStudent(Guid studentId)
+        {
+            return _sessionRepo.GetFeedbackOfStudent(studentId);
+        }
+
+        public IEnumerable<SessionFeedback> GetFeedbacksOfTutor(Guid tutorId)
+        {
+            return _sessionRepo.GetFeedbackForTutor(tutorId);
+        }
+
+        public Session UpdateStudentNotes(Student student, Guid sessionId, UpdateStudentNotesDTO notesDTO)
+        {
+            var session = _sessionRepo.GetSessionsForStudent(student.StudentId).FirstOrDefault(e => e.SessionId == sessionId);
+            if(session == null)
+            {
+                throw new BadRequestException("Student isn't enrolled in session with such Id");
+            }
+            session.StudentNotes = notesDTO.StudentNotes;
+            _sessionRepo.UpdateSession(session);
+            return session;
+        }
+
+        public Session UpdateRecommendations(Tutor tutor, Guid sessionId, UpdateRecommendationsDTO recommendationsDTO)
+        {
+            var session = _sessionRepo.GetSessionsForTutor(tutor.TutorId).FirstOrDefault(e => e.SessionId == sessionId);
+            if(session == null)
+            {
+                throw new BadRequestException("Tutor isn't enrolled in session with such Id");
+            }
+            session.Recommendations = recommendationsDTO.Recommendations;
+            _sessionRepo.UpdateSession(session);
+            return session;  
+        }
+
+        public Resource UploadResource(Tutor tutor, Guid sessionId, CreateResourceDTO resourceDTO)
+        {
+            var session = _sessionRepo.GetSessionsForTutor(tutor.TutorId).FirstOrDefault(e => e.SessionId == sessionId);
+            if(session == null)
+            {
+                throw new BadRequestException("Tutor isn't enrolled in session with such Id");
+            }
+            var resource = _mapper.Map<Resource>(resourceDTO);
+            resource.SessionId = sessionId;
+            _sessionRepo.AddResource(resource);
+            return resource;
+        }
+
+        public bool RemoveResource(Tutor tutor, Guid resourceId)
+        {
+            var session = _sessionRepo.GetSessionsForTutor(tutor.TutorId);
+            if(session.Count() == 0)
+            {
+                throw new BadRequestException("Tutor isn't enrolled in session with such Id");
+            }
+            _sessionRepo.DeleteResource(resourceId);
+            return true;
+        }
+
+        public Assessment AddAssessment(Tutor tutor, Guid sessionId, CreateAssessmentDTO assessmentDTO)
+        {
+            var session = _sessionRepo.GetSessionsForTutor(tutor.TutorId);
+            if(session.Count() == 0)
+            {
+                throw new BadRequestException("Tutor isn't enrolled in session with such Id");
+            }
+            var assessment = _mapper.Map<Assessment>(assessmentDTO);
+            assessment.SessionId = sessionId;
+            var newAssessment = _sessionRepo.SaveAssessment(assessment);
+            return newAssessment;
+        }
+
+        public bool RemoveAssessment(Tutor tutor, Guid assessmentId)
+        {
+            var session = _sessionRepo.GetSessionsForTutor(tutor.TutorId);
+            if(session == null)
+            {
+                throw new BadRequestException("Tutor isn't enrolled in session with such Id");
+            }
+            _sessionRepo.DeleteAssessment(assessmentId);
+            return true;   
+        }
+
+        public IEnumerable<SessionFeedback> GetAllReports()
+        {
+            return _sessionRepo.GetAllFeedbacks().Where(e => e.Report == true);
+        }
+
+        public SessionFeedback MarkAsAddressed(Guid feedbackId)
+        {
+            var feedback = _sessionRepo.GetAllFeedbacks().FirstOrDefault(e => e.Id == feedbackId);
+            feedback.ReportAddressed = true;
+            _sessionRepo.UpdateSessionFeedback(feedback);
+            return feedback;
         }
     }
 }

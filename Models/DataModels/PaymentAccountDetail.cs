@@ -5,6 +5,7 @@ namespace elearning_platform.Models
 {
     public class PaymentAccountDetail : BaseEntity
     {
+        [Key]
         public Guid Id { get; set; }
 
         public string? YenePaySellerCode { get; set; }

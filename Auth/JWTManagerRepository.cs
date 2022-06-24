@@ -33,6 +33,9 @@ namespace elearning_platform.Auth
             var user = _userRepo.AuthUser(loginDTO);
             if (user != null)
             {
+                if(user.Banned){
+                    throw new BadRequestException("User Has Been Banned");
+                }
                 if (loginDTO.pinCode != null)
 
                 {

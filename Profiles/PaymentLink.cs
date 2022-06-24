@@ -10,6 +10,7 @@ namespace elearning_platform.Profiles
         {
             CreateMap<CreatePaymentLinkDTO, PaymentLink>();
             CreateMap<CreatePaymentLinkDTO, SessionPaymentLink>();
+            CreateMap<PaymentLink, ReadPaymentLinkDTO>();
         }
     }
 }

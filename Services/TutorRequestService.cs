@@ -19,5 +19,10 @@ namespace elearning_platform.Services
         {
             return _tutorRequestRepo.GetTutorRequestsForStudent(id).ToList();
         }
+
+        public IEnumerable<TutorRequest> GetRequestsForTutor(Guid id)
+        {
+            return _tutorRequestRepo.GetTutorRequestsForTutor(id).ToList();
+        }
     }
 }

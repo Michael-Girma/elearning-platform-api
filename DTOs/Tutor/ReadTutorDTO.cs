@@ -8,5 +8,7 @@ namespace elearning_platform.DTO
         public Guid Uid { get; set; }
 
         public ReadUserDTO User { get; set; }
+
+        public virtual ICollection<ReadSessionFeedbackDTO> SessionFeedbacks { get; set; }
     }
 }

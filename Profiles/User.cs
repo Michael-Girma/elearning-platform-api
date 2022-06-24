@@ -11,6 +11,7 @@ namespace elearning_platform.Profiles
             CreateMap<SignupDTO, User>();
             CreateMap<User, ReadUserDTO>();
             CreateMap<UserDetailsDTO, ReadLoginDTO>();
+            CreateMap<UpdateUserDetailsDTO, User>();
         }
     }
 }

@@ -24,6 +24,17 @@ namespace elearning_platform.Models
 
         public virtual OnlineSession? OnlineSession { get; set; }
 
+        public virtual ICollection<Resource> Resources { get; set; }
+
+        public virtual ICollection<Assessment> Assessments { get; set; }
+
+        public int SessionLength { get; set; }
+
+        public string? StudentNotes { get; set; }
+
+        public string? Recommendations { get; set; }
+
+        public virtual SessionFeedback SessionFeedback { get; set; }
         public enum BookingStatuses
         {
             Booked,

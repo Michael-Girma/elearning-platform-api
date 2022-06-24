@@ -10,6 +10,7 @@ namespace elearning_platform.Profiles
         {
             CreateMap<Tutor, ReadTutorDTO>();
             CreateMap<Tutor, ReadTutorDetailsDTO>();
+            // CreateMap<>();
         }
     }
 }

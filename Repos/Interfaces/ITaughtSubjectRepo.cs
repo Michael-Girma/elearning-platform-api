@@ -10,5 +10,10 @@ namespace elearning_platform.Repo
         TaughtSubject? GetTaughtSubjectById(Guid id);
 
         IEnumerable<TaughtSubject> GetTaughtSubjectBySid(Guid subjectId);
+        IEnumerable<TaughtSubject> GetTaughtSubjectForTutor(Guid tutorId);
+        IEnumerable<TaughtSubject> GetAllTaughtSubjects();
+        bool DeleteTaughtSubject(Guid taughtSubjectId);
+        IEnumerable<Session> GetSessionsForTaughtSubject(Guid taughtSubjectId);
+        TaughtSubject UpdateTaughtSubject(TaughtSubject ts);
     }
 }

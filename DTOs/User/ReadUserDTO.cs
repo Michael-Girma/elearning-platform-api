@@ -3,7 +3,7 @@ using elearning_platform.Models;
 
 namespace elearning_platform.DTO
 {
-    public class ReadUserDTO
+    public class ReadUserDTO : BaseEntityDTO
     {
         [Key]
         public Guid Uid { get; set; }
@@ -23,5 +23,11 @@ namespace elearning_platform.DTO
         public bool emailVerified { get; set; }
 
         public bool banned { get; set; }
+
+        public string Location { get; set; }
+
+        public string? ProfileImage { get; set; }
+
+        public ReadPaymentAccountDetailDTO PaymentAccountDetail { get; set; }
     }
 }

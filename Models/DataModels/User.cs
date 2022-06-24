@@ -8,9 +8,6 @@ namespace elearning_platform.Models
         [Key]
         public Guid Uid { get; set; }
 
-        [Required]
-        public string Username { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -26,6 +23,10 @@ namespace elearning_platform.Models
         public bool EmailVerified { get; set; }
 
         public bool Banned { get; set; }
+
+        public string? Location { get; set; }
+
+        public string? ProfileImage { get; set; }
 
         public virtual ICollection<UserClaim> Claims { get; set; }
 

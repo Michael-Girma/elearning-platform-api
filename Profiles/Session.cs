@@ -10,6 +10,10 @@ namespace elearning_platform.Profiles
         {
             CreateMap<Tutor, ReadTutorDTO>();
             CreateMap<Session, ReadSessionDTO>();
+            CreateMap<SessionOrder, ReadSessionOrderDTO>();
+            CreateMap<SessionPaymentLink, ReadSessionPaymentLinkDTO>();
+            CreateMap<SessionFeedback, ReadSessionFeedbackDTO>();
+            CreateMap<CreateSessionFeedbackDTO, SessionFeedback>();
             // CreateMap<ICollection<Session>, ICollection<ReadSessionDTO>();
         }
     }

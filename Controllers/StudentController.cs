@@ -32,7 +32,19 @@ namespace elearning_platform.Controllers
         {
             var student = _currentUserService.GetStudent();
             var requests = _tutorRequestService.GetRequestsForStudent(student.StudentId);
+            var tutors = from request in requests select request.TaughtSubject.Tutor;
             return Ok(_mapper.Map<IEnumerable<ReadTutorRequestDTO>>(requests));
+        }
+
+        [HttpGet]
+        [Route("enquired_subjects")]
+        [Authorize(Policy=Policies.StudentOnly)]
+        public async Task<ActionResult> GetEnquiredSubjects()
+        {
+            var student = _currentUserService.GetStudent();
+            var requests = _tutorRequestService.GetRequestsForStudent(student.StudentId);
+            var subjects = from request in requests select request.TaughtSubject.Subject;
+            return Ok(_mapper.Map<IEnumerable<ReadSubjectDTO>>(subjects.Distinct()));
         }
     }
 }

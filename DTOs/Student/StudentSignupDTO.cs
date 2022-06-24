@@ -3,12 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace elearning_platform.DTO
 {
-    public class StudentSignupDTO
+    public class StudentSignupDTO : SignupDTO
     {
-        [Required]
-        public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public Guid EducationLevelId { get; set; }
+        public Guid? EducationLevelId { get; set; }
     }
 }

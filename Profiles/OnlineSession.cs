@@ -9,6 +9,7 @@ namespace elearning_platform.Profiles
         public OnlineSessionProfile()
         {
             CreateMap<OnlineSession, ReadOnlineSessionDTO>();
+
         }
     }
 }
